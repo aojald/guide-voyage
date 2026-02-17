@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guide voyage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fafbfc;
+      --bg-card: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --primary: #1e3a5f;
+      --primary-light: #2563eb;
+      --accent: #0284c7;
+      --border: #e2e8f0;
+      --border-focus: #0284c7;
+      --danger: #b91c1c;
+      --warning: #b45309;
+      --success: #047857;
+      --teal: #0d9488;
+      --teal-bg: #ccfbf1;
+      --amber: #d97706;
+      --amber-bg: #fef3c7;
+      --indigo: #4f46e5;
+      --indigo-bg: #e0e7ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+      line-height: 1.5;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .page-header {
+      background: linear-gradient(135deg, var(--primary) 0%, #2d4a6f 100%);
+      color: #fff;
+      padding: 1rem 1rem 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 0 1rem; }
+    .page-header .container { padding: 0 1rem; }
+    .header-flex { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+    .lang-switch { display: flex; gap: 0; }
+    .lang-btn {
+      padding: 0.35rem 0.6rem; font-size: 0.8125rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.5);
+      background: transparent; color: rgba(255,255,255,0.8); cursor: pointer;
+    }
+    .lang-btn:first-child { border-radius: 4px 0 0 4px; }
+    .lang-btn:last-child { border-radius: 0 4px 4px 0; border-left: none; }
+    .lang-btn:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .lang-btn.active { background: rgba(255,255,255,0.25); color: #fff; }
+    h1 { font-size: 1.35rem; font-weight: 700; margin: 0 0 0.35rem 0; letter-spacing: -0.02em; }
+    .page-header .intro { margin: 0; color: rgba(255,255,255,0.9); font-size: 0.875rem; font-weight: 400; max-width: 540px; }
+    .main { padding-bottom: 1.5rem; }
+    .form { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; margin-bottom: 1rem; }
+    .field { display: flex; flex-direction: column; gap: 0.35rem; }
+    .field label { font-weight: 600; font-size: 0.75rem; color: var(--text); letter-spacing: 0.01em; }
+    .field select {
+      padding: 0.5rem 0.75rem; font-size: 0.9375rem; font-family: inherit; color: var(--text);
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; min-width: 0; width: 100%;
+      max-width: 220px; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field select:hover { border-color: #94a3b8; }
+    .field select:focus { outline: none; border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2); }
+    .result { display: none; }
+    .result.visible { display: block; }
+    .section {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.75rem 1rem; margin-bottom: 0.75rem; box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .section h2 {
+      font-size: 0.875rem; font-weight: 600; margin: 0 0 0.5rem 0; color: var(--primary);
+      letter-spacing: 0.01em; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+    }
+    .section ul { margin: 0; padding-left: 1.1rem; }
+    .section li { margin-bottom: 0.35rem; color: var(--text-muted); font-size: 0.875rem; }
+    .section .subsec { font-weight: 600; color: var(--text); margin-top: 0.6rem; margin-bottom: 0.25rem; list-style: none; padding-left: 0; }
+    .section .subsec:first-child { margin-top: 0; }
+    .section.empty .content { color: #8898aa; font-style: italic; }
+
+    /* Blocs Avant / Pendant / Après — visuels et percutants */
+    .phase {
+      margin-top: 0.85rem; padding: 0.75rem 1rem; border-radius: 8px; border-left: 4px solid;
+    }
+    .phase:first-child { margin-top: 0; }
+    .phase-title {
+      font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 0.5rem; color: inherit;
+    }
+    .phase-avant { border-left-color: var(--teal); background: var(--teal-bg); }
+    .phase-avant .phase-title { color: #0f766e; }
+    .phase-pendant { border-left-color: var(--amber); background: var(--amber-bg); }
+    .phase-pendant .phase-title { color: #b45309; }
+    .phase-apres { border-left-color: var(--indigo); background: var(--indigo-bg); }
+    .phase-apres .phase-title { color: #4338ca; }
+    .phase-note { margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--text-muted); font-style: italic; }
+    .phase ul { margin: 0; padding-left: 1.1rem; }
+    .phase li { margin-bottom: 0.3rem; font-size: 0.875rem; }
+    .badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-left: 0.5rem; }
+    .badge.danger { background: #fed7d7; color: var(--danger); }
+    .badge.warning { background: #feebc8; color: var(--warning); }
+    .badge.info { background: #e0f2fe; color: #0369a1; }
+    .risk-badge { margin-bottom: 0.5rem; }
+    .comments-box { margin-top: 0.5rem; padding: 0.5rem 0.75rem; background: var(--bg-subtle); border-radius: 6px; font-size: 0.8125rem; color: var(--text-muted); }
+
+    /* Bandeau récapitulatif : pays + indicateurs */
+    .pays-badges {
+      margin-bottom: 1rem; background: var(--bg-card); border-radius: 10px;
+      border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+    .pays-banner-header {
+      display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1rem;
+      background: linear-gradient(180deg, var(--bg-subtle) 0%, var(--bg-card) 100%);
+      border-bottom: 1px solid var(--border); font-weight: 600; font-size: 1rem; color: var(--text);
+    }
+    .pays-banner-flag { font-size: 1.5rem; line-height: 1; }
+    .pays-banner-name { letter-spacing: 0.01em; }
+    .pays-badges-indicators {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.5rem 1rem;
+      padding: 0.85rem 1rem;
+    }
+    .pays-badges .indicator {
+      display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text);
+      padding: 0.25rem 0;
+    }
+    .pays-badges .dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 0 1px rgba(0,0,0,0.06);
+    }
+    .pays-badges .dot.standard { background: #64748b; }
+    .pays-badges .dot.critique { background: #dc2626; }
+    .pays-badges .dot.attention { background: var(--amber); }
+    .pays-badges .dot.info { background: var(--accent); }
+    .travel-type-badge {
+      font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.5rem;
+      padding: 0.35rem 0.6rem; background: var(--bg-subtle); border-radius: 6px;
+      display: inline-block; border: 1px solid var(--border);
+    }
+    .travel-type-badge strong { color: var(--text); font-weight: 600; }
+    .empty-state {
+      margin: 0 0 1rem 0; padding: 1rem; background: var(--bg-card);
+      border-radius: 8px; color: var(--text-muted); font-size: 0.9375rem;
+      text-align: center; border: 1px dashed var(--border); display: block;
+    }
+    .empty-state[style*="display: none"] { display: none !important; }
+    .pays-tip {
+      margin-top: 1rem; padding: 0.75rem 1rem; background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+      border-radius: 8px; border-left: 4px solid #22c55e; font-size: 0.9375rem; color: var(--text-muted);
+      font-style: italic;
+    }
+    .pays-tip strong { color: var(--text); font-style: normal; font-weight: 600; }
+
+    /* Recherche pays (combobox) — dropdown SOUS le champ, jamais par-dessus */
+    .field-pays { position: relative; max-width: 360px; width: 100%; }
+    .pays-input-wrap { position: relative; display: block; width: 100%; }
+    .field-pays input[type="text"] {
+      padding: 0.5rem 2.25rem 0.5rem 0.75rem; font-size: 16px; font-family: inherit; color: var(--text);
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field-pays input[type="text"]:focus {
+      outline: none; border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+    }
+    .field-pays input[type="text"]::placeholder { color: #94a3b8; }
+    .field-pays .pays-clear {
+      position: absolute; right: 0.4rem; top: 50%; transform: translateY(-50%);
+      width: 2rem; height: 2rem; min-width: 2rem; min-height: 2rem; padding: 0; border: none; border-radius: 4px;
+      background: transparent; color: var(--text-muted); cursor: pointer; font-size: 1.25rem; line-height: 1;
+      display: none; align-items: center; justify-content: center;
+    }
+    .field-pays .pays-clear:hover { background: var(--bg-subtle); color: var(--text); }
+    .field-pays .pays-clear.visible { display: flex; }
+    .field-pays input[type="hidden"] { display: none; }
+    .pays-dropdown {
+      position: absolute; left: 0; right: 0; top: 100%; margin-top: 6px; max-width: 100%;
+      max-height: min(280px, 50vh); overflow-y: auto;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 10px 25px rgba(15,23,42,0.15);
+      z-index: 30; opacity: 0; visibility: hidden; transition: opacity 0.12s ease, visibility 0.12s;
+      -webkit-overflow-scrolling: touch;
+    }
+    .pays-dropdown.visible { opacity: 1; visibility: visible; }
+    .pays-dropdown-hint {
+      padding: 0.6rem 0.75rem; font-size: 0.8125rem; color: var(--text-muted); text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .pays-dropdown-empty {
+      padding: 0.75rem; font-size: 0.8125rem; color: var(--text-muted); text-align: center;
+    }
+    .pays-dropdown-list { max-height: min(260px, 45vh); overflow-y: auto; }
+    .pays-dropdown-item {
+      padding: 0.6rem 0.75rem; cursor: pointer; font-size: 0.9375rem; border-bottom: 1px solid var(--border);
+      transition: background 0.08s; min-height: 44px; display: flex; align-items: center;
+    }
+.pays-dropdown-item:hover,
+.pays-dropdown-item.highlight { background: var(--bg-subtle); }
+    .pays-dropdown-item:last-child { border-bottom: none; }
+    .pays-dropdown-item small { color: var(--text-muted); margin-left: 0.4rem; font-size: 0.8125rem; }
+    .pays-dropdown-item.hidden { display: none !important; }
+
+    @media print {
+      .page-header .lang-switch, .form, .field-pays .pays-clear, .empty-state { display: none !important; }
+      .page-header { padding: 0.5rem 0; margin-bottom: 0.5rem; }
+      .result.visible { display: block !important; }
+      .travel-type-badge { margin-bottom: 0.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .page-header { padding: 0.75rem 0.75rem 1rem; margin-bottom: 0.75rem; }
+      .container { padding: 0 0.75rem; }
+      h1 { font-size: 1.2rem; }
+      .page-header .intro { font-size: 0.8125rem; }
+      .form { flex-direction: column; gap: 0.75rem; margin-bottom: 0.75rem; }
+      .field-pays { max-width: none; }
+      .field select { max-width: none; }
+      .section { padding: 0.6rem 0.75rem; margin-bottom: 0.6rem; }
+      .section h2 { font-size: 0.8125rem; }
+      .section li { font-size: 0.8125rem; }
+      .pays-badges-indicators { grid-template-columns: 1fr; gap: 0.35rem; padding: 0.6rem 0.75rem; }
+      .pays-banner-header { padding: 0.6rem 0.75rem; font-size: 0.9375rem; }
+      .pays-banner-flag { font-size: 1.25rem; }
+      .pays-badges .indicator { font-size: 0.75rem; }
+      .pays-dropdown { max-height: min(240px, 45vh); }
+      .pays-dropdown-list { max-height: min(220px, 40vh); }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <div class="container header-flex">
+      <div>
+        <h1 id="page-title">Guide voyage</h1>
+        <p class="intro" id="page-intro">Pays et type de voyage → consignes avant, pendant et après.</p>
+      </div>
+      <div class="lang-switch">
+        <button type="button" class="lang-btn active" data-lang="fr" title="Français" aria-pressed="true">FR</button>
+        <button type="button" class="lang-btn" data-lang="en" title="English" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+    <div class="form">
+      <div class="field field-pays">
+        <label for="pays-search" id="label-pays">Pays de destination</label>
+        <div class="pays-input-wrap">
+          <input type="text" id="pays-search" placeholder="Nom ou code pays (ex. France, FR) — 2 car. min." autocomplete="off">
+          <button type="button" class="pays-clear" id="pays-clear" aria-label="">×</button>
+        </div>
+        <input type="hidden" id="pays" value="">
+        <div id="pays-dropdown" class="pays-dropdown" role="listbox">
+          <div id="pays-dropdown-hint" class="pays-dropdown-hint" style="display: none;">Tapez au moins 2 caractères pour rechercher</div>
+          <div id="pays-dropdown-empty" class="pays-dropdown-empty" style="display: none;">Aucun pays trouvé</div>
+          <div id="pays-dropdown-list" class="pays-dropdown-list"></div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="type" id="label-type">Type de voyage</label>
+        <select id="type">
+          <option value="pro">Professionnel</option>
+          <option value="perso">Personnel</option>
+        </select>
+      </div>
+    </div>
+
+    <p id="empty-state" class="empty-state" role="status"></p>
+
+    <div id="result" class="result">
+      <div id="pays-badges-row" class="pays-badges" style="display: none;"></div>
+      <div id="travel-type-badge" class="travel-type-badge" aria-hidden="true"></div>
+      <div id="section-personnes" class="section">
+        <h2>Risque sur les personnes</h2>
+        <div class="content" id="content-personnes"></div>
+      </div>
+      <div id="section-donnees" class="section">
+        <h2>Risque sur les données (appareils et accès cloud)</h2>
+        <div class="content" id="content-donnees"></div>
+      </div>
+      <div id="section-forfait" class="section">
+        <h2>Risques hors forfait</h2>
+        <div class="content" id="content-forfait"></div>
+      </div>
+      <div id="pays-tip" class="pays-tip" role="note" style="display: none;"></div>
+    </div>
+    </div>
+  </main>
+
+  <script>
+    const PAYS = __PAYS_JSON__;
+    const TIPS = __TIPS_JSON__;
+
+    // ——— Référentiel des textes de recommandations (à mettre à jour ici) ———
+    const TEXTS = {
+      personnes: {
+        avant: {
+          standard: [
+            'Réservations par Assistantes de direction, sauvegarde infos principales (transport/hébergement)',
+            'Préparation ID Sécurité par AD (contacts et procédures d\'urgence sur place)'
+          ],
+          orange_rouge: [
+            'Vérification par Assistante de direction couverture assurance rapatriement (support équipe RH)',
+            'Sauvegarde infos détaillées par AD (ensemble de l\'itinéraire et transports)',
+            'Vérification des prérequis auprès médecine du voyage par AD si risque épidémique',
+            'Orga briefing sécurité + mesures sécurité ad hoc sur place avec partenaires'
+          ],
+          validationOrange: 'Validation d\'un associé de la stratégie',
+          validationRouge: 'Validation du Management'
+        },
+        pendant: {
+          standard: [
+            'Conserver à tout moment sur soi l\'ID Sécurité',
+            'Si visite de site industriel : respect consignes sécurité, port des EPI',
+            'Signaler tout incident grave (accident, retard majeur, hospitalisation) à ICP',
+            'Respect des recos du Ministère des Affaires Etrangères le cas échéant'
+          ],
+          orange_rouge: [
+            'Respect des recos Ministères des Affaires Etrangères et du briefing sécurité',
+            'Visites chantiers / actifs isolés : signalées à l\'avance, jamais effectuées seul'
+          ]
+        },
+        apres: {
+          standard: [
+            'Si incident sur place non déclaré immédiatement, compte-rendu écrit ou oral',
+            'Consultation médicale si symptômes post-voyage'
+          ],
+          orange_rouge: [
+            'Si suspicion de contamination de retour de zone endémique : quarantaine (télétravail)'
+          ]
+        }
+      },
+      donnees: {
+        avantMicrosoft: 'L\'accès au tenant Microsoft depuis ce pays doit faire l\'objet d\'une demande préalable.',
+        effacerConversations: 'Effacer les conversations sensibles des applis iOS (WhatsApp, Signal, SMS, etc.) sur les terminaux personnels.',
+        effacerConversationsPro: 'Effacer les conversations sensibles des applis iOS (WhatsApp, Signal, SMS, etc.) sur les terminaux personnels. La DSI peut proposer un iPhone de prêt vide pour les usages personnels.',
+        avant: {
+          standard: [
+            'Mettre à jour tous les appareils (OS, antivirus, applications)',
+            'Modifier les codes PIN s\'ils sont simples à deviner (e.g. dates de naissance)'
+          ],
+          blocked: [
+            'Supprimer les données sensibles stockées localement sans synchro OneDrive'
+          ],
+          douane: []
+        },
+        pendant: {
+          blocked: [
+            'Garder PC et iPhone sous contrôle constant ; ne jamais laisser les appareils sans surveillance ni dans la chambre sans protection',
+            'Éteindre complètement les appareils quand temporairement laissés (pas de veille)',
+            'Refuser chargeurs, câbles ou accessoires fournis par des tiers',
+            'Ne jamais stocker d\'informations confidentielles dans la chambre ou sur les appareils sans chiffrement (clé usb, PC ou tablettes personnels)',
+            'Adopter une posture irréprochable en public et éviter toute invitation, cadeau ou situation non professionnelle',
+            'Signaler immédiatement tout comportement ou situation suspecte (interrogatoire, propositions ambiguës, incidents techniques, bugs ou incidents)'
+          ],
+          douane: [
+            'À la douane : coopérer, ne pas refuser l\'inspection même si intrusive ; réponse factuelle et professionnelle aux questions sur l\'activité et les appareils ; limiter les données stockées physiquement pour réduire les risques de fuite'
+          ],
+          douaneLineOnly: 'À la douane : coopérer, ne pas refuser l\'inspection même si intrusive ; réponse factuelle et professionnelle ; limiter les données stockées physiquement'
+        },
+        apres: {
+          standard: [
+            'Déclarer tout incident ou suspicion d\'incident',
+            'Débriefer et intégrer les retours d\'expérience pour améliorer la politique de sécurité'
+          ],
+          compromis: [
+            'Considérer les appareils comme compromis ; déclencher les procédures de réinitialisation (réinstallation complète)'
+          ]
+        },
+        proDouaneAvant: [
+          'La DSI peut, sur demande, vous mettre à disposition un iPhone vierge pour vos usages personnels pendant la durée du voyage. Celui-ci ne devra être synchronisé qu\'une fois la douane passée.'
+        ],
+        proDouaneApres: [
+          'Restituer l\'iPhone de prêt au service IT afin qu\'il soit effacé.'
+        ]
+      }
+    };
+
+    const TEXTS_EN = {
+      personnes: {
+        avant: {
+          standard: [
+            'Bookings by Executive Assistants, save main info (transport/accommodation)',
+            'Security ID preparation by EA (contacts and emergency procedures on site)'
+          ],
+          orange_rouge: [
+            'EA to verify repatriation insurance coverage (HR team support)',
+            'Detailed info backup by EA (full itinerary and transport)',
+            'EA to check travel medicine requirements if epidemic risk',
+            'Security briefing + ad hoc security measures on site with partners'
+          ],
+          validationOrange: 'Associate validation of strategy',
+          validationRouge: 'Management validation'
+        },
+        pendant: {
+          standard: [
+            'Always carry the Security ID',
+            'If visiting industrial site: follow safety instructions, wear PPE',
+            'Report any serious incident (accident, major delay, hospitalization) to ICP',
+            'Comply with Ministry of Foreign Affairs recommendations where applicable'
+          ],
+          orange_rouge: [
+            'Comply with Foreign Affairs and security briefing recommendations',
+            'Site/isolated asset visits: notified in advance, never carried out alone'
+          ]
+        },
+        apres: {
+          standard: [
+            'If on-site incident not reported immediately: written or oral report',
+            'Medical consultation if post-travel symptoms'
+          ],
+          orange_rouge: [
+            'If suspected contamination on return from endemic area: quarantine (remote work)'
+          ]
+        }
+      },
+      donnees: {
+        avantMicrosoft: 'Microsoft tenant access from this country must be requested in advance.',
+        effacerConversations: 'Erase sensitive conversations from iOS apps (WhatsApp, Signal, SMS, etc.) on personal devices.',
+        effacerConversationsPro: 'Erase sensitive conversations from iOS apps (WhatsApp, Signal, SMS, etc.) on personal devices. IT can provide a clean loan iPhone for personal use.',
+        avant: {
+          standard: [
+            'Update all devices (OS, antivirus, applications)',
+            'Change PIN codes if easy to guess (e.g. birth dates)'
+          ],
+          blocked: [
+            'Remove sensitive data stored locally without OneDrive sync'
+          ],
+          douane: []
+        },
+        pendant: {
+          blocked: [
+            'Keep PC and iPhone under constant control; never leave devices unattended or in the room without protection',
+            'Fully power off devices when temporarily left (no standby)',
+            'Refuse chargers, cables or accessories provided by third parties',
+            'Never store confidential information in the room or on devices without encryption (USB key, PC or personal tablets)',
+            'Maintain irreproachable conduct in public and avoid any invitation, gift or unprofessional situation',
+            'Immediately report any suspicious behaviour or situation (questioning, ambiguous proposals, technical incidents, bugs or events)'
+          ],
+          douane: [
+            'At customs: cooperate, do not refuse inspection even if intrusive; factual and professional answers on activity and devices; limit physically stored data to reduce leakage risk'
+          ],
+          douaneLineOnly: 'At customs: cooperate, do not refuse inspection even if intrusive; factual and professional response; limit physically stored data'
+        },
+        apres: {
+          standard: [
+            'Report any incident or suspected incident',
+            'Debrief and incorporate feedback to improve security policy'
+          ],
+          compromis: [
+            'Consider devices compromised; trigger reset procedures (full reinstallation)'
+          ]
+        },
+        proDouaneAvant: [
+          'IT can, on request, provide you with a clean iPhone for your personal use during the trip. It should only be synced once customs has been cleared.'
+        ],
+        proDouaneApres: [
+          'Return the loan iPhone to the IT department so that it can be wiped.'
+        ]
+      }
+    };
+
+    const UI = {
+      fr: {
+        title: 'Guide voyage',
+        intro: 'Pays et type de voyage → consignes avant, pendant et après.',
+        labelPays: 'Pays de destination',
+        placeholderSearch: 'Nom ou code pays (ex. France, FR) — 2 car. min.',
+        hintSearch: 'Tapez au moins 2 caractères pour rechercher',
+        noResult: 'Aucun pays trouvé',
+        labelType: 'Type de voyage',
+        typePro: 'Professionnel',
+        typePerso: 'Personnel',
+        sectionPersonnes: 'Risque sur les personnes',
+        sectionDonnees: 'Risque sur les données (appareils et accès cloud)',
+        sectionForfait: 'Risques hors forfait',
+        phaseAvant: 'Avant le voyage',
+        phasePendant: 'Pendant le voyage',
+        phaseApres: 'Après le voyage',
+        phaseAvantShort: 'Avant',
+        phasePendantShort: 'Pendant',
+        phaseApresShort: 'Après',
+        forfaitOlafly: 'Prendre une carte SIM spécifique Olafly : la destination n\'est pas couverte par le forfait de base.',
+        forfaitRien: 'Aucun risque hors forfait identifié pour cette destination.',
+        badgePersonnes: 'Risque personnes',
+        badgeMicrosoft: 'Accès Microsoft bloqués',
+        badgeDouane: 'Risque vol de données au passage à la douane',
+        badgeDonnees: 'Vol / compromission données en voyage',
+        badgeOlafly: 'SIM Olafly nécessaire',
+        noConsigne: 'Aucune consigne.',
+        commentsLabel: 'Régions / forfait 4G :',
+        clearPays: 'Effacer la sélection',
+        emptyStateMessage: 'Sélectionnez un pays pour afficher les consignes.',
+        travelTypeLabel: 'Type de voyage :',
+        tipLabel: 'En bref :'
+      },
+      en: {
+        title: 'Travel guide',
+        intro: 'Country and travel type → guidelines before, during and after.',
+        labelPays: 'Destination country',
+        placeholderSearch: 'Country name or code (e.g. France, FR) — min. 2 chars',
+        hintSearch: 'Type at least 2 characters to search',
+        noResult: 'No country found',
+        labelType: 'Travel type',
+        typePro: 'Business',
+        typePerso: 'Personal',
+        sectionPersonnes: 'Risk to persons',
+        sectionDonnees: 'Risk to data (devices and cloud access)',
+        sectionForfait: 'Out-of-plan risks',
+        phaseAvant: 'Before travel',
+        phasePendant: 'During travel',
+        phaseApres: 'After travel',
+        phaseAvantShort: 'Before',
+        phasePendantShort: 'During',
+        phaseApresShort: 'After',
+        forfaitOlafly: 'Use a specific Olafly SIM card: destination not covered by base plan.',
+        forfaitRien: 'No out-of-plan risk identified for this destination.',
+        badgePersonnes: 'Person risk',
+        badgeMicrosoft: 'Microsoft access blocked',
+        badgeDouane: 'Data theft risk at customs',
+        badgeDonnees: 'Data theft/compromise during travel',
+        badgeOlafly: 'Olafly SIM needed',
+        noConsigne: 'No guidelines.',
+        commentsLabel: 'Regions / 4G plan:',
+        clearPays: 'Clear selection',
+        emptyStateMessage: 'Select a country to display the guidelines.',
+        travelTypeLabel: 'Travel type:',
+        tipLabel: 'Quick tip:'
+      }
+    };
+
+    let lang = 'fr';
+
+    function t() { return UI[lang] || UI.fr; }
+    function texts() { return lang === 'en' ? TEXTS_EN : TEXTS; }
+
+    function renderPhase(phaseClass, title, items) {
+      if (!items || items.length === 0) return '';
+      const lis = items.map(i => '<li>' + escapeHtml(i) + '</li>').join('');
+      return '<div class="phase ' + phaseClass + '"><div class="phase-title">' + escapeHtml(title) + '</div><ul>' + lis + '</ul></div>';
+    }
+
+    const paysSearch = document.getElementById('pays-search');
+    const paysHidden = document.getElementById('pays');
+    const paysClear = document.getElementById('pays-clear');
+    const paysDropdown = document.getElementById('pays-dropdown');
+    const paysDropdownHint = document.getElementById('pays-dropdown-hint');
+    const paysDropdownEmpty = document.getElementById('pays-dropdown-empty');
+    const paysDropdownList = document.getElementById('pays-dropdown-list');
+    const paysBadgesRow = document.getElementById('pays-badges-row');
+    const travelTypeBadge = document.getElementById('travel-type-badge');
+    const selectType = document.getElementById('type');
+    const result = document.getElementById('result');
+    const emptyStateEl = document.getElementById('empty-state');
+    const paysTipEl = document.getElementById('pays-tip');
+    const contentPersonnes = document.getElementById('content-personnes');
+    const contentDonnees = document.getElementById('content-donnees');
+    const contentForfait = document.getElementById('content-forfait');
+    const pageTitle = document.getElementById('page-title');
+    const pageIntro = document.getElementById('page-intro');
+    const sectionPersonnesTitle = document.querySelector('#section-personnes h2');
+    const sectionDonneesTitle = document.querySelector('#section-donnees h2');
+    const sectionForfaitTitle = document.querySelector('#section-forfait h2');
+
+    const MIN_CHARS = 2;
+    let dropdownItems = [];
+    let highlightedIndex = -1;
+    let filterTimeout = null;
+
+    function normalizeForSearch(s) {
+      return (s || '').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').trim();
+    }
+
+    function matchPays(q, p) {
+      const s = normalizeForSearch(q);
+      if (!s) return true;
+      const nom = normalizeForSearch(p.nom);
+      const nomEN = normalizeForSearch(p.nomEN);
+      const code = (p.code || '').toLowerCase();
+      return nom.includes(s) || nomEN.includes(s) || code.startsWith(s);
+    }
+
+    function displayName(p) {
+      return (lang === 'en' && p.nomEN ? p.nomEN : p.nom) + ' (' + p.code + ')';
+    }
+
+    function codeToFlag(code) {
+      if (!code || typeof code !== 'string' || code.length !== 2) return '';
+      const c = code.toUpperCase();
+      return String.fromCodePoint(...[...c].map(ch => 0x1F1E6 - 65 + ch.charCodeAt(0)));
+    }
+
+    function buildDropdownOnce() {
+      paysDropdownList.innerHTML = '';
+      PAYS.forEach((p, i) => {
+        const div = document.createElement('div');
+        div.className = 'pays-dropdown-item';
+        div.setAttribute('role', 'option');
+        div.setAttribute('data-code', p.code);
+        div.setAttribute('data-index', String(i));
+        const name = lang === 'en' && p.nomEN ? p.nomEN : p.nom;
+        div.innerHTML = escapeHtml(name) + ' <small>' + escapeHtml(p.code) + '</small>';
+        div.addEventListener('click', () => selectPaysByCode(p.code));
+        div.addEventListener('mouseenter', () => {
+          highlightedIndex = i;
+          dropdownItems.forEach((node, j) => node.classList.toggle('highlight', j === i));
+        });
+        paysDropdownList.appendChild(div);
+      });
+      dropdownItems = paysDropdownList.querySelectorAll('.pays-dropdown-item');
+    }
+
+    function selectPaysByCode(code) {
+      const p = PAYS.find(x => x.code === code);
+      if (!p) return;
+      paysHidden.value = p.code;
+      paysSearch.value = displayName(p);
+      paysDropdown.classList.remove('visible');
+      paysSearch.blur();
+      highlightedIndex = -1;
+      updateClearButton();
+      render();
+      result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function updateClearButton() {
+      paysClear.classList.toggle('visible', !!paysHidden.value);
+    }
+
+    function applyLang() {
+      const u = t();
+      pageTitle.textContent = u.title;
+      pageIntro.textContent = u.intro;
+      document.getElementById('label-pays').textContent = u.labelPays;
+      document.getElementById('label-type').textContent = u.labelType;
+      paysSearch.placeholder = u.placeholderSearch;
+      paysDropdownHint.textContent = u.hintSearch;
+      paysDropdownEmpty.textContent = u.noResult;
+      selectType.options[0].text = u.typePro;
+      selectType.options[1].text = u.typePerso;
+      sectionPersonnesTitle.textContent = u.sectionPersonnes;
+      sectionDonneesTitle.textContent = u.sectionDonnees;
+      sectionForfaitTitle.textContent = u.sectionForfait;
+      document.getElementById('pays-clear').setAttribute('aria-label', u.clearPays);
+      document.documentElement.lang = lang;
+      document.title = u.title;
+      emptyStateEl.textContent = u.emptyStateMessage;
+      buildDropdownOnce();
+      if (paysHidden.value) {
+        const p = PAYS.find(x => x.code === paysHidden.value);
+        if (p) paysSearch.value = displayName(p);
+      }
+      updateClearButton();
+      render();
+    }
+
+    function runFilter() {
+      let q = paysSearch.value.trim();
+      if (!q) {
+        paysHidden.value = '';
+        paysDropdown.classList.remove('visible');
+        updateClearButton();
+        render();
+      }
+      if (q.length < MIN_CHARS) {
+        paysDropdownHint.style.display = 'block';
+        paysDropdownEmpty.style.display = 'none';
+        dropdownItems.forEach(el => el.classList.add('hidden'));
+        paysDropdown.classList.add('visible');
+        return;
+      }
+      if (q.includes(' (')) q = q.split(' (')[0].trim();
+      paysDropdownHint.style.display = 'none';
+      let firstVisible = -1;
+      dropdownItems.forEach((el, i) => {
+        const show = matchPays(q, PAYS[i]);
+        el.classList.toggle('hidden', !show);
+        if (show && firstVisible < 0) firstVisible = i;
+      });
+      if (firstVisible < 0) {
+        paysDropdownEmpty.style.display = 'block';
+        paysDropdown.classList.add('visible');
+        highlightedIndex = -1;
+        return;
+      }
+      paysDropdownEmpty.style.display = 'none';
+      highlightedIndex = firstVisible;
+      dropdownItems.forEach((el, i) => el.classList.toggle('highlight', i === firstVisible));
+      paysDropdown.classList.add('visible');
+      dropdownItems[firstVisible].scrollIntoView({ block: 'nearest' });
+    }
+
+    function filterDropdown() {
+      if (filterTimeout) clearTimeout(filterTimeout);
+      filterTimeout = setTimeout(runFilter, 80);
+    }
+
+    function moveHighlight(delta) {
+      const visible = Array.from(dropdownItems).map((el, i) => ({ el, i })).filter(({ el }) => !el.classList.contains('hidden'));
+      if (visible.length === 0) return;
+      let visIdx = visible.findIndex(({ i }) => i === highlightedIndex);
+      visIdx = (visIdx + delta + visible.length) % visible.length;
+      const { el, i } = visible[visIdx];
+      highlightedIndex = i;
+      dropdownItems.forEach((node, j) => node.classList.toggle('highlight', j === i));
+      el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    paysSearch.addEventListener('input', () => filterDropdown());
+    paysSearch.addEventListener('focus', () => {
+      const q = paysSearch.value.trim();
+      if (q.length < MIN_CHARS) {
+        paysDropdownHint.style.display = 'block';
+        paysDropdownEmpty.style.display = 'none';
+        dropdownItems.forEach(el => el.classList.add('hidden'));
+        paysDropdown.classList.add('visible');
+      } else runFilter();
+    });
+    paysSearch.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        paysDropdown.classList.remove('visible');
+        paysSearch.blur();
+        return;
+      }
+      if (!paysDropdown.classList.contains('visible')) return;
+      if (e.key === 'ArrowDown') { e.preventDefault(); moveHighlight(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); moveHighlight(-1); }
+      else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (highlightedIndex >= 0 && dropdownItems[highlightedIndex] && !dropdownItems[highlightedIndex].classList.contains('hidden')) {
+          selectPaysByCode(PAYS[highlightedIndex].code);
+        }
+      }
+    });
+    paysClear.addEventListener('click', () => {
+      paysHidden.value = '';
+      paysSearch.value = '';
+      paysSearch.focus();
+      paysDropdown.classList.remove('visible');
+      updateClearButton();
+      render();
+    });
+    document.addEventListener('click', (e) => {
+      if (!paysSearch.contains(e.target) && !paysDropdown.contains(e.target) && !paysClear.contains(e.target)) {
+        paysDropdown.classList.remove('visible');
+      }
+    });
+
+    function render() {
+      const code = paysHidden.value;
+      const typeVoyage = selectType.value;
+      const isPro = typeVoyage === 'pro';
+
+      if (!code) {
+        result.classList.remove('visible');
+        emptyStateEl.style.display = 'block';
+        travelTypeBadge.style.display = 'none';
+        paysBadgesRow.style.display = 'none';
+        paysTipEl.style.display = 'none';
+        contentPersonnes.innerHTML = '';
+        contentDonnees.innerHTML = '';
+        contentForfait.innerHTML = '';
+        return;
+      }
+      emptyStateEl.style.display = 'none';
+
+      const pays = PAYS.find(p => p.code === code);
+      if (!pays) return;
+
+      const u = t();
+      const tx = texts();
+      result.classList.add('visible');
+      travelTypeBadge.innerHTML = u.travelTypeLabel + ' <strong>' + (isPro ? u.typePro : u.typePerso) + '</strong>';
+      travelTypeBadge.style.display = 'block';
+
+      // ——— Bandeau indicateurs : 3 niveaux (critique / attention / info) ———
+      const indicators = [];
+      const rc = String(pays.riskColor || '').trim().toLowerCase();
+      indicators.push({
+        level: rc === 'red' || rc === 'rouge' ? 'critique' : rc === 'orange' ? 'attention' : 'standard',
+        label: u.badgePersonnes
+      });
+      if (pays.blocked) indicators.push({ level: 'critique', label: u.badgeMicrosoft });
+      if (pays.cleanDevice) indicators.push({ level: 'attention', label: u.badgeDouane });
+      if (pays.cleanOnReturn) indicators.push({ level: 'attention', label: u.badgeDonnees });
+      if (pays.olaflySim) indicators.push({ level: 'info', label: '📱 ' + u.badgeOlafly });
+      const flag = codeToFlag(pays.code);
+      const nameHtml = escapeHtml(displayName(pays));
+      paysBadgesRow.innerHTML =
+        '<div class="pays-banner-header"><span class="pays-banner-flag" aria-hidden="true">' + (flag || '') + '</span><span class="pays-banner-name">' + nameHtml + '</span></div>' +
+        '<div class="pays-badges-indicators">' +
+        indicators.map(ind =>
+          '<div class="indicator"><span class="dot ' + escapeHtml(ind.level) + '"></span><span>' + escapeHtml(ind.label) + '</span></div>'
+        ).join('') +
+        '</div>';
+      paysBadgesRow.style.display = 'block';
+
+      // ——— Risque sur les personnes : une seule réponse consolidée (Avant / Pendant / Après) ———
+      const isOrangeRouge = rc === 'orange' || rc === 'red' || rc === 'rouge';
+      let pAvant = tx.personnes.avant.standard.concat(isOrangeRouge ? tx.personnes.avant.orange_rouge : []);
+      if (isOrangeRouge) {
+        pAvant = pAvant.concat(rc === 'orange' ? [tx.personnes.avant.validationOrange] : [tx.personnes.avant.validationRouge]);
+      }
+      const pPendant = tx.personnes.pendant.standard.concat(isOrangeRouge ? tx.personnes.pendant.orange_rouge : []);
+      const pApres = tx.personnes.apres.standard.concat(isOrangeRouge ? tx.personnes.apres.orange_rouge : []);
+      contentPersonnes.innerHTML =
+        renderPhase('phase-avant', u.phaseAvant, pAvant) +
+        renderPhase('phase-pendant', u.phasePendant, pPendant) +
+        renderPhase('phase-apres', u.phaseApres, pApres);
+      document.getElementById('section-personnes').classList.remove('empty');
+
+      // ——— Risque sur les données : cumul des risques (blocked + cleanDevice possibles) ———
+      let dAvant = tx.donnees.avant.standard.slice();
+      let dPendant = [];
+      let dApres = tx.donnees.apres.standard.slice();
+      if (pays.blocked) {
+        const effacerBlocked = (isPro && !pays.cleanDevice) ? tx.donnees.effacerConversationsPro : tx.donnees.effacerConversations;
+        dAvant = dAvant.concat([tx.donnees.avantMicrosoft]).concat(tx.donnees.avant.blocked).concat([effacerBlocked]);
+        dPendant = dPendant.concat(tx.donnees.pendant.blocked);
+        if (!pays.cleanDevice) {
+          dPendant = dPendant.concat([tx.donnees.pendant.douaneLineOnly]);
+        }
+      }
+      if (pays.cleanDevice) {
+        if (!pays.blocked) {
+          const effacerDouane = (isPro && !pays.cleanDevice) ? tx.donnees.effacerConversationsPro : tx.donnees.effacerConversations;
+          dAvant = dAvant.concat([effacerDouane]);
+        }
+        dPendant = dPendant.concat(tx.donnees.pendant.douane);
+      }
+      if (pays.blocked || pays.cleanOnReturn) {
+        dApres = dApres.concat(tx.donnees.apres.compromis);
+      }
+      if (isPro && pays.cleanDevice) {
+        dAvant = dAvant.concat(tx.donnees.proDouaneAvant);
+        dApres = dApres.concat(tx.donnees.proDouaneApres);
+      }
+      contentDonnees.innerHTML =
+        renderPhase('phase-avant', u.phaseAvantShort, dAvant) +
+        renderPhase('phase-pendant', u.phasePendantShort, dPendant) +
+        renderPhase('phase-apres', u.phaseApresShort, dApres);
+      document.getElementById('section-donnees').classList.remove('empty');
+
+      // ——— Risques hors forfait ———
+      const itemsForfait = pays.olaflySim ? [u.forfaitOlafly] : [u.forfaitRien];
+      setContent(contentForfait, itemsForfait, 'section-forfait', pays.comments);
+
+      sectionPersonnesTitle.textContent = u.sectionPersonnes;
+      sectionDonneesTitle.textContent = u.sectionDonnees;
+      sectionForfaitTitle.textContent = u.sectionForfait;
+
+      const tipData = TIPS[pays.code] || TIPS[(pays.code || '').toUpperCase().slice(0, 2)];
+      if (tipData && paysTipEl) {
+        const tipText = lang === 'en' ? tipData.en : tipData.fr;
+        paysTipEl.innerHTML = '<strong>' + escapeHtml(u.tipLabel) + '</strong> ' + escapeHtml(tipText);
+        paysTipEl.style.display = 'block';
+      } else if (paysTipEl) {
+        paysTipEl.style.display = 'none';
+      }
+    }
+
+    function setContent(el, items, sectionId, comments) {
+      const section = document.getElementById(sectionId);
+      const u = t();
+      if (items.length === 0 && !comments) {
+        el.innerHTML = '<p>' + escapeHtml(u.noConsigne) + '</p>';
+        section.classList.add('empty');
+        return;
+      }
+      section.classList.remove('empty');
+      let html = '<ul>' + items.map(i => '<li>' + escapeHtml(i) + '</li>').join('') + '</ul>';
+      if (comments) {
+        html += '<div class="comments-box"><strong>' + escapeHtml(u.commentsLabel) + '</strong> ' + escapeHtml(comments) + '</div>';
+      }
+      el.innerHTML = html;
+    }
+
+    function escapeHtml(s) {
+      const div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    selectType.addEventListener('change', render);
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const newLang = btn.getAttribute('data-lang');
+        if (!newLang || newLang === lang) return;
+        lang = newLang;
+        document.querySelectorAll('.lang-btn').forEach(b => {
+          const isActive = b.getAttribute('data-lang') === lang;
+          b.classList.toggle('active', isActive);
+          b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+        applyLang();
+      });
+    });
+
+    applyLang();
+  </script>
+</body>
+</html>

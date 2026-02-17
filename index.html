@@ -1,0 +1,4149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guide voyage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fafbfc;
+      --bg-card: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --primary: #1e3a5f;
+      --primary-light: #2563eb;
+      --accent: #0284c7;
+      --border: #e2e8f0;
+      --border-focus: #0284c7;
+      --danger: #b91c1c;
+      --warning: #b45309;
+      --success: #047857;
+      --teal: #0d9488;
+      --teal-bg: #ccfbf1;
+      --amber: #d97706;
+      --amber-bg: #fef3c7;
+      --indigo: #4f46e5;
+      --indigo-bg: #e0e7ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+      line-height: 1.5;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .page-header {
+      background: linear-gradient(135deg, var(--primary) 0%, #2d4a6f 100%);
+      color: #fff;
+      padding: 1rem 1rem 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 0 1rem; }
+    .page-header .container { padding: 0 1rem; }
+    .header-flex { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+    .lang-switch { display: flex; gap: 0; }
+    .lang-btn {
+      padding: 0.35rem 0.6rem; font-size: 0.8125rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.5);
+      background: transparent; color: rgba(255,255,255,0.8); cursor: pointer;
+    }
+    .lang-btn:first-child { border-radius: 4px 0 0 4px; }
+    .lang-btn:last-child { border-radius: 0 4px 4px 0; border-left: none; }
+    .lang-btn:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .lang-btn.active { background: rgba(255,255,255,0.25); color: #fff; }
+    h1 { font-size: 1.35rem; font-weight: 700; margin: 0 0 0.35rem 0; letter-spacing: -0.02em; }
+    .page-header .intro { margin: 0; color: rgba(255,255,255,0.9); font-size: 0.875rem; font-weight: 400; max-width: 540px; }
+    .main { padding-bottom: 1.5rem; }
+    .form { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; margin-bottom: 1rem; }
+    .field { display: flex; flex-direction: column; gap: 0.35rem; }
+    .field label { font-weight: 600; font-size: 0.75rem; color: var(--text); letter-spacing: 0.01em; }
+    .field select {
+      padding: 0.5rem 0.75rem; font-size: 0.9375rem; font-family: inherit; color: var(--text);
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; min-width: 0; width: 100%;
+      max-width: 220px; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field select:hover { border-color: #94a3b8; }
+    .field select:focus { outline: none; border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2); }
+    .result { display: none; }
+    .result.visible { display: block; }
+    .section {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.75rem 1rem; margin-bottom: 0.75rem; box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .section h2 {
+      font-size: 0.875rem; font-weight: 600; margin: 0 0 0.5rem 0; color: var(--primary);
+      letter-spacing: 0.01em; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+    }
+    .section ul { margin: 0; padding-left: 1.1rem; }
+    .section li { margin-bottom: 0.35rem; color: var(--text-muted); font-size: 0.875rem; }
+    .section .subsec { font-weight: 600; color: var(--text); margin-top: 0.6rem; margin-bottom: 0.25rem; list-style: none; padding-left: 0; }
+    .section .subsec:first-child { margin-top: 0; }
+    .section.empty .content { color: #8898aa; font-style: italic; }
+
+    /* Blocs Avant / Pendant / Après — visuels et percutants */
+    .phase {
+      margin-top: 0.85rem; padding: 0.75rem 1rem; border-radius: 8px; border-left: 4px solid;
+    }
+    .phase:first-child { margin-top: 0; }
+    .phase-title {
+      font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 0.5rem; color: inherit;
+    }
+    .phase-avant { border-left-color: var(--teal); background: var(--teal-bg); }
+    .phase-avant .phase-title { color: #0f766e; }
+    .phase-pendant { border-left-color: var(--amber); background: var(--amber-bg); }
+    .phase-pendant .phase-title { color: #b45309; }
+    .phase-apres { border-left-color: var(--indigo); background: var(--indigo-bg); }
+    .phase-apres .phase-title { color: #4338ca; }
+    .phase-note { margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--text-muted); font-style: italic; }
+    .phase ul { margin: 0; padding-left: 1.1rem; }
+    .phase li { margin-bottom: 0.3rem; font-size: 0.875rem; }
+    .badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-left: 0.5rem; }
+    .badge.danger { background: #fed7d7; color: var(--danger); }
+    .badge.warning { background: #feebc8; color: var(--warning); }
+    .badge.info { background: #e0f2fe; color: #0369a1; }
+    .risk-badge { margin-bottom: 0.5rem; }
+    .comments-box { margin-top: 0.5rem; padding: 0.5rem 0.75rem; background: var(--bg-subtle); border-radius: 6px; font-size: 0.8125rem; color: var(--text-muted); }
+
+    /* Bandeau récapitulatif : pays + indicateurs */
+    .pays-badges {
+      margin-bottom: 1rem; background: var(--bg-card); border-radius: 10px;
+      border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+    .pays-banner-header {
+      display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1rem;
+      background: linear-gradient(180deg, var(--bg-subtle) 0%, var(--bg-card) 100%);
+      border-bottom: 1px solid var(--border); font-weight: 600; font-size: 1rem; color: var(--text);
+    }
+    .pays-banner-flag { font-size: 1.5rem; line-height: 1; }
+    .pays-banner-name { letter-spacing: 0.01em; }
+    .pays-badges-indicators {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.5rem 1rem;
+      padding: 0.85rem 1rem;
+    }
+    .pays-badges .indicator {
+      display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text);
+      padding: 0.25rem 0;
+    }
+    .pays-badges .dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 0 1px rgba(0,0,0,0.06);
+    }
+    .pays-badges .dot.standard { background: #64748b; }
+    .pays-badges .dot.critique { background: #dc2626; }
+    .pays-badges .dot.attention { background: var(--amber); }
+    .pays-badges .dot.info { background: var(--accent); }
+    .travel-type-badge {
+      font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.5rem;
+      padding: 0.35rem 0.6rem; background: var(--bg-subtle); border-radius: 6px;
+      display: inline-block; border: 1px solid var(--border);
+    }
+    .travel-type-badge strong { color: var(--text); font-weight: 600; }
+    .empty-state {
+      margin: 0 0 1rem 0; padding: 1rem; background: var(--bg-card);
+      border-radius: 8px; color: var(--text-muted); font-size: 0.9375rem;
+      text-align: center; border: 1px dashed var(--border); display: block;
+    }
+    .empty-state[style*="display: none"] { display: none !important; }
+    .pays-tip {
+      margin-top: 1rem; padding: 0.75rem 1rem; background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+      border-radius: 8px; border-left: 4px solid #22c55e; font-size: 0.9375rem; color: var(--text-muted);
+      font-style: italic;
+    }
+    .pays-tip strong { color: var(--text); font-style: normal; font-weight: 600; }
+
+    /* Recherche pays (combobox) — dropdown SOUS le champ, jamais par-dessus */
+    .field-pays { position: relative; max-width: 360px; width: 100%; }
+    .pays-input-wrap { position: relative; display: block; width: 100%; }
+    .field-pays input[type="text"] {
+      padding: 0.5rem 2.25rem 0.5rem 0.75rem; font-size: 16px; font-family: inherit; color: var(--text);
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field-pays input[type="text"]:focus {
+      outline: none; border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+    }
+    .field-pays input[type="text"]::placeholder { color: #94a3b8; }
+    .field-pays .pays-clear {
+      position: absolute; right: 0.4rem; top: 50%; transform: translateY(-50%);
+      width: 2rem; height: 2rem; min-width: 2rem; min-height: 2rem; padding: 0; border: none; border-radius: 4px;
+      background: transparent; color: var(--text-muted); cursor: pointer; font-size: 1.25rem; line-height: 1;
+      display: none; align-items: center; justify-content: center;
+    }
+    .field-pays .pays-clear:hover { background: var(--bg-subtle); color: var(--text); }
+    .field-pays .pays-clear.visible { display: flex; }
+    .field-pays input[type="hidden"] { display: none; }
+    .pays-dropdown {
+      position: absolute; left: 0; right: 0; top: 100%; margin-top: 6px; max-width: 100%;
+      max-height: min(280px, 50vh); overflow-y: auto;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 10px 25px rgba(15,23,42,0.15);
+      z-index: 30; opacity: 0; visibility: hidden; transition: opacity 0.12s ease, visibility 0.12s;
+      -webkit-overflow-scrolling: touch;
+    }
+    .pays-dropdown.visible { opacity: 1; visibility: visible; }
+    .pays-dropdown-hint {
+      padding: 0.6rem 0.75rem; font-size: 0.8125rem; color: var(--text-muted); text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .pays-dropdown-empty {
+      padding: 0.75rem; font-size: 0.8125rem; color: var(--text-muted); text-align: center;
+    }
+    .pays-dropdown-list { max-height: min(260px, 45vh); overflow-y: auto; }
+    .pays-dropdown-item {
+      padding: 0.6rem 0.75rem; cursor: pointer; font-size: 0.9375rem; border-bottom: 1px solid var(--border);
+      transition: background 0.08s; min-height: 44px; display: flex; align-items: center;
+    }
+.pays-dropdown-item:hover,
+.pays-dropdown-item.highlight { background: var(--bg-subtle); }
+    .pays-dropdown-item:last-child { border-bottom: none; }
+    .pays-dropdown-item small { color: var(--text-muted); margin-left: 0.4rem; font-size: 0.8125rem; }
+    .pays-dropdown-item.hidden { display: none !important; }
+
+    @media print {
+      .page-header .lang-switch, .form, .field-pays .pays-clear, .empty-state { display: none !important; }
+      .page-header { padding: 0.5rem 0; margin-bottom: 0.5rem; }
+      .result.visible { display: block !important; }
+      .travel-type-badge { margin-bottom: 0.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .page-header { padding: 0.75rem 0.75rem 1rem; margin-bottom: 0.75rem; }
+      .container { padding: 0 0.75rem; }
+      h1 { font-size: 1.2rem; }
+      .page-header .intro { font-size: 0.8125rem; }
+      .form { flex-direction: column; gap: 0.75rem; margin-bottom: 0.75rem; }
+      .field-pays { max-width: none; }
+      .field select { max-width: none; }
+      .section { padding: 0.6rem 0.75rem; margin-bottom: 0.6rem; }
+      .section h2 { font-size: 0.8125rem; }
+      .section li { font-size: 0.8125rem; }
+      .pays-badges-indicators { grid-template-columns: 1fr; gap: 0.35rem; padding: 0.6rem 0.75rem; }
+      .pays-banner-header { padding: 0.6rem 0.75rem; font-size: 0.9375rem; }
+      .pays-banner-flag { font-size: 1.25rem; }
+      .pays-badges .indicator { font-size: 0.75rem; }
+      .pays-dropdown { max-height: min(240px, 45vh); }
+      .pays-dropdown-list { max-height: min(220px, 40vh); }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <div class="container header-flex">
+      <div>
+        <h1 id="page-title">Guide voyage</h1>
+        <p class="intro" id="page-intro">Pays et type de voyage → consignes avant, pendant et après.</p>
+      </div>
+      <div class="lang-switch">
+        <button type="button" class="lang-btn active" data-lang="fr" title="Français" aria-pressed="true">FR</button>
+        <button type="button" class="lang-btn" data-lang="en" title="English" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+    <div class="form">
+      <div class="field field-pays">
+        <label for="pays-search" id="label-pays">Pays de destination</label>
+        <div class="pays-input-wrap">
+          <input type="text" id="pays-search" placeholder="Nom ou code pays (ex. France, FR) — 2 car. min." autocomplete="off">
+          <button type="button" class="pays-clear" id="pays-clear" aria-label="">×</button>
+        </div>
+        <input type="hidden" id="pays" value="">
+        <div id="pays-dropdown" class="pays-dropdown" role="listbox">
+          <div id="pays-dropdown-hint" class="pays-dropdown-hint" style="display: none;">Tapez au moins 2 caractères pour rechercher</div>
+          <div id="pays-dropdown-empty" class="pays-dropdown-empty" style="display: none;">Aucun pays trouvé</div>
+          <div id="pays-dropdown-list" class="pays-dropdown-list"></div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="type" id="label-type">Type de voyage</label>
+        <select id="type">
+          <option value="pro">Professionnel</option>
+          <option value="perso">Personnel</option>
+        </select>
+      </div>
+    </div>
+
+    <p id="empty-state" class="empty-state" role="status"></p>
+
+    <div id="result" class="result">
+      <div id="pays-badges-row" class="pays-badges" style="display: none;"></div>
+      <div id="travel-type-badge" class="travel-type-badge" aria-hidden="true"></div>
+      <div id="section-personnes" class="section">
+        <h2>Risque sur les personnes</h2>
+        <div class="content" id="content-personnes"></div>
+      </div>
+      <div id="section-donnees" class="section">
+        <h2>Risque sur les données (appareils et accès cloud)</h2>
+        <div class="content" id="content-donnees"></div>
+      </div>
+      <div id="section-forfait" class="section">
+        <h2>Risques hors forfait</h2>
+        <div class="content" id="content-forfait"></div>
+      </div>
+      <div id="pays-tip" class="pays-tip" role="note" style="display: none;"></div>
+    </div>
+    </div>
+  </main>
+
+  <script>
+    const PAYS = [
+  {
+    "code": "AF",
+    "nom": "Afghanistan",
+    "nomEN": "Afghanistan",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "ZA",
+    "nom": "Afrique du Sud",
+    "nomEN": "South Africa",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AL",
+    "nom": "Albanie",
+    "nomEN": "Albania",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "DZ",
+    "nom": "Algérie",
+    "nomEN": "Algeria",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "DE",
+    "nom": "Allemagne",
+    "nomEN": "Germany",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AD",
+    "nom": "Andorre",
+    "nomEN": "Andorra",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AO",
+    "nom": "Angola",
+    "nomEN": "Angola",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AI",
+    "nom": "Anguilla",
+    "nomEN": "Anguilla",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AQ",
+    "nom": "Antarctique",
+    "nomEN": "Antarctica",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AG",
+    "nom": "Antigua et Barbuda",
+    "nomEN": "Antigua and Barbuda",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SA",
+    "nom": "Arabie Saoudite",
+    "nomEN": "Saudi Arabia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AR",
+    "nom": "Argentine",
+    "nomEN": "Argentina",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AM",
+    "nom": "Arménie",
+    "nomEN": "Armenia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AW",
+    "nom": "Aruba",
+    "nomEN": "Aruba",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AU",
+    "nom": "Australie",
+    "nomEN": "Australia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AT",
+    "nom": "Autriche",
+    "nomEN": "Austria",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AZ",
+    "nom": "Azerbaïdjan",
+    "nomEN": "Azerbaijan",
+    "riskColor": "Orange",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": true,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": false,
+    "comments": ""
+  },
+  {
+    "code": "BS",
+    "nom": "Bahamas",
+    "nomEN": "Bahamas",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BH",
+    "nom": "Bahrein",
+    "nomEN": "Bahrain",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BD",
+    "nom": "Bangladesh",
+    "nomEN": "Bangladesh",
+    "riskColor": "Orange",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": false,
+    "comments": ""
+  },
+  {
+    "code": "BB",
+    "nom": "Barbade",
+    "nomEN": "Barbados",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BE",
+    "nom": "Belgique",
+    "nomEN": "Belgium",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BM",
+    "nom": "Bermudes",
+    "nomEN": "Bermuda",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BT",
+    "nom": "Bhoutan",
+    "nomEN": "Bhutan",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BO",
+    "nom": "Bolivie (État plurinational de)",
+    "nomEN": "Bolivia, Plurinational State of",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BQ",
+    "nom": "Bonaire, Saint-Eustache et Saba",
+    "nomEN": "Bonaire, Sint Eustatius and Saba",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BA",
+    "nom": "Bosnie-Herzégovine",
+    "nomEN": "Bosnia and Herzegovina",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BW",
+    "nom": "Botswana",
+    "nomEN": "Botswana",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BV",
+    "nom": "Bouvet, Ile",
+    "nomEN": "Bouvet Island",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BN",
+    "nom": "Brunéi Darussalam",
+    "nomEN": "Brunei Darussalam",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BR",
+    "nom": "Brésil",
+    "nomEN": "Brazil",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BG",
+    "nom": "Bulgarie",
+    "nomEN": "Bulgaria",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BF",
+    "nom": "Burkina Faso",
+    "nomEN": "Burkina Faso",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "BI",
+    "nom": "Burundi",
+    "nomEN": "Burundi",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BY",
+    "nom": "Bélarus",
+    "nomEN": "Belarus",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": true,
+    "cleanOnReturn": true,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "BZ",
+    "nom": "Bélize",
+    "nomEN": "Belize",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BJ",
+    "nom": "Bénin",
+    "nomEN": "Benin",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CV",
+    "nom": "Cabo Verde",
+    "nomEN": "Cape Verde",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "KH",
+    "nom": "Cambodge",
+    "nomEN": "Cambodia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CM",
+    "nom": "Cameroun",
+    "nomEN": "Cameroon",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CA",
+    "nom": "Canada",
+    "nomEN": "Canada",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "KY",
+    "nom": "Caïmans, Iles",
+    "nomEN": "Cayman Islands",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CL",
+    "nom": "Chili",
+    "nomEN": "Chile",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CN",
+    "nom": "Chine",
+    "nomEN": "China",
+    "riskColor": "",
+    "blocked": true,
+    "cleanDevice": true,
+    "cleanOnReturn": true,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CX",
+    "nom": "Christmas, île",
+    "nomEN": "Christmas Island",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CY",
+    "nom": "Chypre",
+    "nomEN": "Cyprus",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CC",
+    "nom": "Cocos/Keeling (Îles)",
+    "nomEN": "Cocos (Keeling) Islands",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CO",
+    "nom": "Colombie",
+    "nomEN": "Colombia",
+    "riskColor": "Orange",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": false,
+    "comments": ""
+  },
+  {
+    "code": "KM",
+    "nom": "Comores",
+    "nomEN": "Comoros",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CG",
+    "nom": "Congo",
+    "nomEN": "Congo",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CD",
+    "nom": "Congo, République démocratique du",
+    "nomEN": "Congo, the Democratic Republic of the",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "CK",
+    "nom": "Cook, Iles",
+    "nomEN": "Cook Islands",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "KR",
+    "nom": "Corée, République de",
+    "nomEN": "Korea, Republic of",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "KP",
+    "nom": "Corée, République populaire démocratique de",
+    "nomEN": "Korea, Democratic People's Republic of",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": true,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "CR",
+    "nom": "Costa Rica",
+    "nomEN": "Costa Rica",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "HR",
+    "nom": "Croatie",
+    "nomEN": "Croatia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CU",
+    "nom": "Cuba",
+    "nomEN": "Cuba",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CW",
+    "nom": "Curaçao",
+    "nomEN": "Curaçao",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CI",
+    "nom": "Côte d'Ivoire",
+    "nomEN": "Côte d'Ivoire",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "DK",
+    "nom": "Danemark",
+    "nomEN": "Denmark",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "DJ",
+    "nom": "Djibouti",
+    "nomEN": "Djibouti",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "DO",
+    "nom": "Dominicaine, République",
+    "nomEN": "Dominican Republic",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "DM",
+    "nom": "Dominique",
+    "nomEN": "Dominica",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "EG",
+    "nom": "Egypte",
+    "nomEN": "Egypt",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SV",
+    "nom": "El Salvador",
+    "nomEN": "El Salvador",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AE",
+    "nom": "Emirats arabes unis",
+    "nomEN": "United Arab Emirates",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "EC",
+    "nom": "Equateur",
+    "nomEN": "Ecuador",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "ER",
+    "nom": "Erythrée",
+    "nomEN": "Eritrea",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "ES",
+    "nom": "Espagne",
+    "nomEN": "Spain",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "EE",
+    "nom": "Estonie",
+    "nomEN": "Estonia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "US",
+    "nom": "Etats-Unis d'Amérique",
+    "nomEN": "United States",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": true,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "ET",
+    "nom": "Ethiopie",
+    "nomEN": "Ethiopia",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "FK",
+    "nom": "Falkland/Malouines (Îles)",
+    "nomEN": "Falkland Islands (Malvinas)",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "FJ",
+    "nom": "Fidji",
+    "nomEN": "Fiji",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "FI",
+    "nom": "Finlande",
+    "nomEN": "Finland",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "FR",
+    "nom": "France",
+    "nomEN": "France",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "FO",
+    "nom": "Féroé, îles",
+    "nomEN": "Faroe Islands",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GA",
+    "nom": "Gabon",
+    "nomEN": "Gabon",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": "Including Guadeloupe, Guyane francaise, Martinique, Mayotte, Réunion,Saint Barthélémy, Sain-Martin, Saint-pierre et miquelon"
+  },
+  {
+    "code": "GM",
+    "nom": "Gambie",
+    "nomEN": "Gambia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GH",
+    "nom": "Ghana",
+    "nomEN": "Ghana",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GI",
+    "nom": "Gibraltar",
+    "nomEN": "Gibraltar",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GD",
+    "nom": "Grenade",
+    "nomEN": "Grenada",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GL",
+    "nom": "Groenland",
+    "nomEN": "Greenland",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GR",
+    "nom": "Grèce",
+    "nomEN": "Greece",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GP",
+    "nom": "Guadeloupe",
+    "nomEN": "Guadeloupe",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GU",
+    "nom": "Guam",
+    "nomEN": "Guam",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GT",
+    "nom": "Guatemala",
+    "nomEN": "Guatemala",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GG",
+    "nom": "Guernesey",
+    "nomEN": "Guernsey",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GN",
+    "nom": "Guinée",
+    "nomEN": "Guinea",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": "Including Corfou, crète, cyclades"
+  },
+  {
+    "code": "GQ",
+    "nom": "Guinée équatoriale",
+    "nomEN": "Equatorial Guinea",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GW",
+    "nom": "Guinée-Bissau",
+    "nomEN": "Guinea-Bissau",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GY",
+    "nom": "Guyana",
+    "nomEN": "Guyana",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GF",
+    "nom": "Guyane française",
+    "nomEN": "French Guiana",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GE",
+    "nom": "Géorgie",
+    "nomEN": "Georgia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GS",
+    "nom": "Géorgie du sud et les îles Sandwich du sud",
+    "nomEN": "South Georgia and the South Sandwich Islands",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "HT",
+    "nom": "Haïti",
+    "nomEN": "Haiti",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "HM",
+    "nom": "Heard, Ile et MacDonald, îles",
+    "nomEN": "Heard Island and McDonald Islands",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "HN",
+    "nom": "Honduras",
+    "nomEN": "Honduras",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "HK",
+    "nom": "Hong Kong",
+    "nomEN": "Hong Kong",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "HU",
+    "nom": "Hongrie",
+    "nomEN": "Hungary",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "IN",
+    "nom": "Inde",
+    "nomEN": "India",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "IO",
+    "nom": "Indien (Territoire britannique de l'océan)",
+    "nomEN": "British Indian Ocean Territory",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "ID",
+    "nom": "Indonésie",
+    "nomEN": "Indonesia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "IR",
+    "nom": "Iran, République islamique d'",
+    "nomEN": "Iran, Islamic Republic of",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": true,
+    "cleanOnReturn": true,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "IQ",
+    "nom": "Iraq",
+    "nomEN": "Iraq",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": true,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "IE",
+    "nom": "Irlande",
+    "nomEN": "Ireland",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "IS",
+    "nom": "Islande",
+    "nomEN": "Iceland",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "IL",
+    "nom": "Israël",
+    "nomEN": "Israel",
+    "riskColor": "Red",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "IT",
+    "nom": "Italie",
+    "nomEN": "Italy",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": "Including sardaigne, and sicile"
+  },
+  {
+    "code": "JM",
+    "nom": "Jamaïque",
+    "nomEN": "Jamaica",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "JP",
+    "nom": "Japon",
+    "nomEN": "Japan",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "JE",
+    "nom": "Jersey",
+    "nomEN": "Jersey",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "JO",
+    "nom": "Jordanie",
+    "nomEN": "Jordan",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "KZ",
+    "nom": "Kazakhstan",
+    "nomEN": "Kazakhstan",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "KE",
+    "nom": "Kenya",
+    "nomEN": "Kenya",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "KG",
+    "nom": "Kirghizistan",
+    "nomEN": "Kyrgyzstan",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "KI",
+    "nom": "Kiribati",
+    "nomEN": "Kiribati",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "KW",
+    "nom": "Koweït",
+    "nomEN": "Kuwait",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "LA",
+    "nom": "Lao, République démocratique populaire",
+    "nomEN": "Lao People's Democratic Republic",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "LS",
+    "nom": "Lesotho",
+    "nomEN": "Lesotho",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "LV",
+    "nom": "Lettonie",
+    "nomEN": "Latvia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "LB",
+    "nom": "Liban",
+    "nomEN": "Lebanon",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "LY",
+    "nom": "Libye",
+    "nomEN": "Libya",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "LR",
+    "nom": "Libéria",
+    "nomEN": "Liberia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "LI",
+    "nom": "Liechtenstein",
+    "nomEN": "Liechtenstein",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "LT",
+    "nom": "Lituanie",
+    "nomEN": "Lithuania",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "LU",
+    "nom": "Luxembourg",
+    "nomEN": "Luxembourg",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MO",
+    "nom": "Macao",
+    "nomEN": "Macao",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MK",
+    "nom": "Macédoine, l'ex-République yougoslave de",
+    "nomEN": "Macedonia, the Former Yugoslav Republic of",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MG",
+    "nom": "Madagascar",
+    "nomEN": "Madagascar",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MY",
+    "nom": "Malaisie",
+    "nomEN": "Malaysia",
+    "riskColor": "Orange",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": false,
+    "comments": ""
+  },
+  {
+    "code": "MW",
+    "nom": "Malawi",
+    "nomEN": "Malawi",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MV",
+    "nom": "Maldives",
+    "nomEN": "Maldives",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "ML",
+    "nom": "Mali",
+    "nomEN": "Mali",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "MT",
+    "nom": "Malte",
+    "nomEN": "Malta",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MP",
+    "nom": "Mariannes du nord, Iles",
+    "nomEN": "Northern Mariana Islands",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MA",
+    "nom": "Maroc",
+    "nomEN": "Morocco",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MH",
+    "nom": "Marshall, Iles",
+    "nomEN": "Marshall Islands",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MQ",
+    "nom": "Martinique",
+    "nomEN": "Martinique",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MU",
+    "nom": "Maurice",
+    "nomEN": "Mauritius",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MR",
+    "nom": "Mauritanie",
+    "nomEN": "Mauritania",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "YT",
+    "nom": "Mayotte",
+    "nomEN": "Mayotte",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MX",
+    "nom": "Mexique",
+    "nomEN": "Mexico",
+    "riskColor": "Orange",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": false,
+    "comments": ""
+  },
+  {
+    "code": "FM",
+    "nom": "Micronésie, Etats Fédérés de",
+    "nomEN": "Micronesia, Federated States of",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MD",
+    "nom": "Moldova, République de",
+    "nomEN": "Moldova, Republic of",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "MC",
+    "nom": "Monaco",
+    "nomEN": "Monaco",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MN",
+    "nom": "Mongolie",
+    "nomEN": "Mongolia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MS",
+    "nom": "Montserrat",
+    "nomEN": "Montserrat",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "ME",
+    "nom": "Monténégro",
+    "nomEN": "Montenegro",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MZ",
+    "nom": "Mozambique",
+    "nomEN": "Mozambique",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "MM",
+    "nom": "Myanmar",
+    "nomEN": "Myanmar",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "NA",
+    "nom": "Namibie",
+    "nomEN": "Namibia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "NR",
+    "nom": "Nauru",
+    "nomEN": "Nauru",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "NI",
+    "nom": "Nicaragua",
+    "nomEN": "Nicaragua",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "NE",
+    "nom": "Niger",
+    "nomEN": "Niger",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "NG",
+    "nom": "Nigéria",
+    "nomEN": "Nigeria",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "NU",
+    "nom": "Niue",
+    "nomEN": "Niue",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "NF",
+    "nom": "Norfolk, Ile",
+    "nomEN": "Norfolk Island",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "NO",
+    "nom": "Norvège",
+    "nomEN": "Norway",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "NC",
+    "nom": "Nouvelle-Calédonie",
+    "nomEN": "New Caledonia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "NZ",
+    "nom": "Nouvelle-Zélande",
+    "nomEN": "New Zealand",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "NP",
+    "nom": "Népal",
+    "nomEN": "Nepal",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "OM",
+    "nom": "Oman",
+    "nomEN": "Oman",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "UG",
+    "nom": "Ouganda",
+    "nomEN": "Uganda",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "UZ",
+    "nom": "Ouzbékistan",
+    "nomEN": "Uzbekistan",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "PK",
+    "nom": "Pakistan",
+    "nomEN": "Pakistan",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": "Including Açores, and madère"
+  },
+  {
+    "code": "PW",
+    "nom": "Palaos",
+    "nomEN": "Palau",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "PS",
+    "nom": "Palestine, Etat de",
+    "nomEN": "Palestine, State of",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "PA",
+    "nom": "Panama",
+    "nomEN": "Panama",
+    "riskColor": "Orange",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": false,
+    "comments": ""
+  },
+  {
+    "code": "PG",
+    "nom": "Papouasie-Nouvelle-Guinée",
+    "nomEN": "Papua New Guinea",
+    "riskColor": "Orange",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": false,
+    "comments": ""
+  },
+  {
+    "code": "PY",
+    "nom": "Paraguay",
+    "nomEN": "Paraguay",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "NL",
+    "nom": "Pays-Bas",
+    "nomEN": "Netherlands",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "PH",
+    "nom": "Philippines",
+    "nomEN": "Philippines",
+    "riskColor": "Orange",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": false,
+    "comments": ""
+  },
+  {
+    "code": "PN",
+    "nom": "Pitcairn",
+    "nomEN": "Pitcairn",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "PL",
+    "nom": "Pologne",
+    "nomEN": "Poland",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "PF",
+    "nom": "Polynésie française",
+    "nomEN": "French Polynesia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "PR",
+    "nom": "Porto Rico",
+    "nomEN": "Puerto Rico",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "PT",
+    "nom": "Portugal",
+    "nomEN": "Portugal",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "PE",
+    "nom": "Pérou",
+    "nomEN": "Peru",
+    "riskColor": "Orange",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": false,
+    "comments": ""
+  },
+  {
+    "code": "QA",
+    "nom": "Qatar",
+    "nomEN": "Qatar",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "RO",
+    "nom": "Roumanie",
+    "nomEN": "Romania",
+    "riskColor": "",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "GB",
+    "nom": "Royaume-Uni de Grande-Bretagne et d'Irlande du Nord",
+    "nomEN": "United Kingdom",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "RU",
+    "nom": "Russie, Fédération de",
+    "nomEN": "Russian Federation",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": true,
+    "cleanOnReturn": true,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "RW",
+    "nom": "Rwanda",
+    "nomEN": "Rwanda",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SY",
+    "nom": "République arabe syrienne",
+    "nomEN": "Syrian Arab Republic",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "CF",
+    "nom": "République centrafricaine",
+    "nomEN": "Central African Republic",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "RE",
+    "nom": "Réunion",
+    "nomEN": "Réunion",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "EH",
+    "nom": "Sahara occidental",
+    "nomEN": "Western Sahara",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "BL",
+    "nom": "Saint-Barthélemy",
+    "nomEN": "Saint Barthélemy",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "KN",
+    "nom": "Saint-Kitts-et-Nevis",
+    "nomEN": "Saint Kitts and Nevis",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SM",
+    "nom": "Saint-Marin",
+    "nomEN": "San Marino",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "MF",
+    "nom": "Saint-Martin (partie française)",
+    "nomEN": "Saint Martin (French part)",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SX",
+    "nom": "Saint-Martin (partie néerlandaise)",
+    "nomEN": "Sint Maarten (Dutch part)",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "PM",
+    "nom": "Saint-Pierre-et-Miquelon",
+    "nomEN": "Saint Pierre and Miquelon",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "VA",
+    "nom": "Saint-Siège",
+    "nomEN": "Holy See (Vatican City State)",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "VC",
+    "nom": "Saint-Vincent-et-les-Grenadines",
+    "nomEN": "Saint Vincent and the Grenadines",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SH",
+    "nom": "Sainte-Hélène, Ascension et Tristan da Cunha",
+    "nomEN": "Saint Helena, Ascension and Tristan da Cunha",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "LC",
+    "nom": "Sainte-Lucie",
+    "nomEN": "Saint Lucia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SB",
+    "nom": "Salomon, Iles",
+    "nomEN": "Solomon Islands",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "WS",
+    "nom": "Samoa",
+    "nomEN": "Samoa",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AS",
+    "nom": "Samoa américaines",
+    "nomEN": "American Samoa",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "ST",
+    "nom": "Sao Tomé-et-Principe",
+    "nomEN": "Sao Tome and Principe",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": "Including Baléares and Canaries"
+  },
+  {
+    "code": "RS",
+    "nom": "Serbie",
+    "nomEN": "Serbia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SC",
+    "nom": "Seychelles",
+    "nomEN": "Seychelles",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SL",
+    "nom": "Sierra Leone",
+    "nomEN": "Sierra Leone",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SG",
+    "nom": "Singapour",
+    "nomEN": "Singapore",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SK",
+    "nom": "Slovaquie",
+    "nomEN": "Slovakia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SI",
+    "nom": "Slovénie",
+    "nomEN": "Slovenia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SO",
+    "nom": "Somalie",
+    "nomEN": "Somalia",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "SD",
+    "nom": "Soudan",
+    "nomEN": "Sudan",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "SS",
+    "nom": "Soudan du Sud",
+    "nomEN": "South Sudan",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "LK",
+    "nom": "Sri Lanka",
+    "nomEN": "Sri Lanka",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CH",
+    "nom": "Suisse",
+    "nomEN": "Switzerland",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SR",
+    "nom": "Suriname",
+    "nomEN": "Suriname",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SE",
+    "nom": "Suède",
+    "nomEN": "Sweden",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SJ",
+    "nom": "Svalbard et île Jan Mayen",
+    "nomEN": "Svalbard and Jan Mayen",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SZ",
+    "nom": "Swaziland",
+    "nomEN": "Eswatini",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "SN",
+    "nom": "Sénégal",
+    "nomEN": "Senegal",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TJ",
+    "nom": "Tadjikistan",
+    "nomEN": "Tajikistan",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TZ",
+    "nom": "Tanzanie, République unie de",
+    "nomEN": "Tanzania, United Republic of",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TW",
+    "nom": "Taïwan, Province de Chine",
+    "nomEN": "Taiwan, Province of China",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TD",
+    "nom": "Tchad",
+    "nomEN": "Chad",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "CZ",
+    "nom": "Tchèque, République",
+    "nomEN": "Czech Republic",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TF",
+    "nom": "Terres australes françaises",
+    "nomEN": "French Southern Territories",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TH",
+    "nom": "Thaïlande",
+    "nomEN": "Thailand",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TL",
+    "nom": "Timor-Leste",
+    "nomEN": "Timor-Leste",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TG",
+    "nom": "Togo",
+    "nomEN": "Togo",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TK",
+    "nom": "Tokelau",
+    "nomEN": "Tokelau",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TO",
+    "nom": "Tonga",
+    "nomEN": "Tonga",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TT",
+    "nom": "Trinité-et-Tobago",
+    "nomEN": "Trinidad and Tobago",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TN",
+    "nom": "Tunisie",
+    "nomEN": "Tunisia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TM",
+    "nom": "Turkménistan",
+    "nomEN": "Turkmenistan",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TC",
+    "nom": "Turks-et-Caïcos (Îles)",
+    "nomEN": "Turks and Caicos Islands",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "TR",
+    "nom": "Turquie",
+    "nomEN": "Turkey",
+    "riskColor": "Orange",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": false,
+    "comments": ""
+  },
+  {
+    "code": "TV",
+    "nom": "Tuvalu",
+    "nomEN": "Tuvalu",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "UA",
+    "nom": "Ukraine",
+    "nomEN": "Ukraine",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "UY",
+    "nom": "Uruguay",
+    "nomEN": "Uruguay",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "VU",
+    "nom": "Vanuatu",
+    "nomEN": "Vanuatu",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "VE",
+    "nom": "Venezuela (République bolivarienne du)",
+    "nomEN": "Venezuela, Bolivarian Republic of",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "VN",
+    "nom": "Viet Nam",
+    "nomEN": "Viet Nam",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "WF",
+    "nom": "Wallis et Futuna",
+    "nomEN": "Wallis and Futuna",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "YE",
+    "nom": "Yémen",
+    "nomEN": "Yemen",
+    "riskColor": "Red",
+    "blocked": true,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": true,
+    "quarantineRisk": true,
+    "comments": ""
+  },
+  {
+    "code": "ZM",
+    "nom": "Zambie",
+    "nomEN": "Zambia",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "ZW",
+    "nom": "Zimbabwe",
+    "nomEN": "Zimbabwe",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "AX",
+    "nom": "Åland, Îles",
+    "nomEN": "Åland Islands",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "IM",
+    "nom": "Île de Man",
+    "nomEN": "Isle of Man",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": false,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "UM",
+    "nom": "Îles mineures éloignées des Etats-Unis",
+    "nomEN": "United States Minor Outlying Islands",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "VG",
+    "nom": "Îles vierges britanniques",
+    "nomEN": "Virgin Islands, British",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  },
+  {
+    "code": "VI",
+    "nom": "Îles vierges des Etats-Unis",
+    "nomEN": "Virgin Islands, U.S.",
+    "riskColor": "",
+    "blocked": false,
+    "cleanDevice": false,
+    "cleanOnReturn": false,
+    "olaflySim": true,
+    "notifyAssistants": false,
+    "quarantineRisk": "",
+    "comments": ""
+  }
+];
+    const TIPS = {"AF": {"fr": "Contexte exigeant : priorité sécurité. Un jour, le tourisme reviendra.", "en": "Challenging context — safety first. One day tourism will return."}, "ZA": {"fr": "Braai, vin et safari. Rapportez du vin, du biltong (vérifiez) ou du rooibos.", "en": "Braai, wine and safari. Bring back wine, biltong (check) or rooibos."}, "AL": {"fr": "Raki, byrek et côte. Rapportez de l'huile d'olive ou du miel.", "en": "Raki, byrek and coast. Bring back olive oil or honey."}, "DZ": {"fr": "Couscous, thé à la menthe et Sahara. Rapportez des dattes ou des épices.", "en": "Couscous, mint tea and Sahara. Bring back dates or spices."}, "DE": {"fr": "Bratwurst, bière et ponctualité. Rapportez du Lebkuchen ou du Haribo (inventé là-bas).", "en": "Bratwurst, beer and punctuality. Bring back Lebkuchen or Haribo (invented there)."}, "AD": {"fr": "Ski et thermalisme. Rapportez du fuet si vous aimez le saucisson.", "en": "Ski and spas. Bring back fuet if you're into cured sausage."}, "AO": {"fr": "Café angolais et piri-piri. Rapportez du piri-piri pour les barbecues.", "en": "Angolan coffee and piri-piri. Bring back piri-piri for BBQs."}, "AI": {"fr": "Un marché local > un centre commercial. Toujours.", "en": "A local market > a shopping mall. Always."}, "AQ": {"fr": "Un fromage, une épice ou un alcool local. Les douanes autorisent (vérifiez).", "en": "Local cheese, spice or spirit. Customs allow (check first)."}, "AG": {"fr": "Rum punch et plage. Rapportez du rhum antillais (en soute).", "en": "Rum punch and beach. Bring back Caribbean rum (in hold)."}, "SA": {"fr": "Kabsa, dates et désert. Rapportez des dattes, du café arabe ou du parfum.", "en": "Kabsa, dates and desert. Bring back dates, Arabic coffee or perfume."}, "AR": {"fr": "Malbec, dulce de leche et steak. La valise sentira bon au retour.", "en": "Malbec, dulce de leche and steak. Your suitcase will smell great."}, "AM": {"fr": "Cognac arménien (oui, ça existe) et lavash. Les amis seront impressionnés.", "en": "Armenian cognac (yes, it exists) and lavash. Friends will be impressed."}, "AW": {"fr": "Une spécialité sucrée à rapporter. Le bureau vote.", "en": "A local sweet to bring back. The office votes."}, "AU": {"fr": "Vegemite (osez), Tim Tam et barbie. Rapportez du Tim Tam pour le bureau.", "en": "Vegemite (dare you), Tim Tam and barbie. Bring back Tim Tam for the office."}, "AT": {"fr": "Sachertorte, schnaps et Tyrol. Rapportez du Mozartkugel. Ou deux.", "en": "Sachertorte, schnaps and Tyrol. Bring back Mozartkugel. Or two."}, "AZ": {"fr": "Thé et grenade (le fruit). Rapportez du caviar ou de la confiture de grenade.", "en": "Tea and pomegranate. Bring back caviar or pomegranate jam."}, "BS": {"fr": "Conch, rhum et plage. Rapportez du rhum ou des épices à conch.", "en": "Conch, rum and beach. Bring back rum or conch spices."}, "BH": {"fr": "Dattes et perles. Rapportez des dattes farcies. Et des photos des mosquées.", "en": "Dates and pearls. Bring back stuffed dates. And mosque photos."}, "BD": {"fr": "Thé et curry. Rapportez du sari ou des épices si la valise le permet.", "en": "Tea and curry. Bring back a sari or spices if the bag allows."}, "BB": {"fr": "Rum, flying fish et Rihanna. Rapportez du rhum Mount Gay.", "en": "Rum, flying fish and Rihanna. Bring back Mount Gay rum."}, "BE": {"fr": "Frites, bière et chocolat. Rapportez des pralines. Pas une seule boîte.", "en": "Fries, beer and chocolate. Bring back pralines. More than one box."}, "BM": {"fr": "Un marché local > un centre commercial. Toujours.", "en": "A local market > a shopping mall. Always."}, "BT": {"fr": "Piment partout et dzongs. Rapportez du thé ou du fromage de yak (séché).", "en": "Chilli everywhere and dzongs. Bring back tea or dried yak cheese."}, "BO": {"fr": "Salteña, altitude et lama. Rapportez du chocolat ou de la quinoa.", "en": "Salteña, altitude and llama. Bring back chocolate or quinoa."}, "BQ": {"fr": "Rapportez une bouteille. Pas forcément d'alcool. Une sauce, un sirop…", "en": "Bring back a bottle. Doesn't have to be alcohol. A sauce, syrup…"}, "BA": {"fr": "Ćevapi, café turc et pont de Mostar. Rapportez de la rakija (avec modération).", "en": "Ćevapi, Turkish coffee and Mostar bridge. Bring back rakija (in moderation)."}, "BW": {"fr": "Safari et braai. Rapportez rien d'animal — juste des photos et du mopane worm (si vous osez).", "en": "Safari and braai. Bring back nothing animal — just photos and mopane worm (if you dare)."}, "BV": {"fr": "Rapportez une bouteille. Pas forcément d'alcool. Une sauce, un sirop…", "en": "Bring back a bottle. Doesn't have to be alcohol. A sauce, syrup…"}, "BN": {"fr": "Ambil (gâteau) et forêt. Rapportez des gâteaux locaux pour le bureau.", "en": "Ambil cake and forest. Bring back local cakes for the office."}, "BR": {"fr": "Feijoada, caipirinha et Christ. Rapportez de la cachaça ou du guaraná.", "en": "Feijoada, caipirinha and Christ. Bring back cachaça or guaraná."}, "BG": {"fr": "Yaourt, roses et rakija. Rapportez de l'huile de rose ou de la confiture.", "en": "Yogurt, roses and rakija. Bring back rose oil or jam."}, "BF": {"fr": "Poulet bicyclette et dolo. Rapportez du beurre de karité (cosmétique ou cuisine).", "en": "Poulet bicyclette and dolo. Bring back shea butter (cosmetic or cooking)."}, "BI": {"fr": "Café et lac Tanganyika. Rapportez du café burundais (très sous-estimé).", "en": "Coffee and Lake Tanganyika. Bring back Burundi coffee (underrated)."}, "BY": {"fr": "Pommes de terre et bania. Rapportez de la vodka locale ou du chocolat.", "en": "Potatoes and bania. Bring back local vodka or chocolate."}, "BZ": {"fr": "Rum, récif et jungle. Rapportez du rhum One Barrel ou du hot sauce.", "en": "Rum, reef and jungle. Bring back One Barrel rum or hot sauce."}, "BJ": {"fr": "Pâte d'arachide et côte. Rapportez du gari ou du sodabi si vous aimez.", "en": "Peanut paste and coast. Bring back gari or sodabi if you're into it."}, "CV": {"fr": "Cachupa et grogue. Rapportez du grogue. Et du thon en conserve local (sérieux).", "en": "Cachupa and grogue. Bring back grogue. And local tinned tuna (seriously)."}, "KH": {"fr": "Amok, temples et tuk-tuk. Rapportez du poivre de Kampot ou de la soie.", "en": "Amok, temples and tuk-tuk. Bring back Kampot pepper or silk."}, "CM": {"fr": "Ndolé, plantain et bière. Rapportez du café ou du cacao.", "en": "Ndolé, plantain and beer. Bring back coffee or cocoa."}, "CA": {"fr": "Sirop d'érable, poutine et « sorry ». Rapportez du sirop. Ou du whisky canadien.", "en": "Maple syrup, poutine and 'sorry'. Bring back syrup. Or Canadian whisky."}, "KY": {"fr": "Un selfie devant le monument le plus kitsch du pays. Pour la postérité.", "en": "A selfie in front of the tackiest landmark. For posterity."}, "CL": {"fr": "Pisco, avocat et désert. Rapportez du pisco ou du vin. Et des alfajores.", "en": "Pisco, avocado and desert. Bring back pisco or wine. And alfajores."}, "CN": {"fr": "Thé, canard laqué et Grande Muraille. Rapportez du thé, des épices ou de la soie.", "en": "Tea, Peking duck and Great Wall. Bring back tea, spices or silk."}, "CX": {"fr": "Le meilleur souvenir ? Ce que vous ne pouvez pas acheter à l'aéroport.", "en": "Best souvenir? Something you can't buy at the airport."}, "CY": {"fr": "Halloumi, mezze et mer. Rapportez du halloumi (sous vide) ou de l'huile.", "en": "Halloumi, mezze and sea. Bring back halloumi (vacuum-packed) or oil."}, "CC": {"fr": "Prenez une photo du plat le plus bizarre que vous osez commander.", "en": "Snap a photo of the weirdest dish you dare to order."}, "CO": {"fr": "Café, arepas et Shakira. Rapportez du café. Vraiment. Et peut-être de l'aguardiente.", "en": "Coffee, arepas and Shakira. Bring back coffee. Seriously. And maybe aguardiente."}, "KM": {"fr": "Langouste et îles. Rapportez du ylang-ylang ou de la vanille.", "en": "Lobster and islands. Bring back ylang-ylang or vanilla."}, "CG": {"fr": "Poulet moambe et forêt. Rapportez du piment ou du café.", "en": "Poulet moambe and forest. Bring back chilli or coffee."}, "CD": {"fr": "Congo : fufu, pondu et café. Rapportez du café si vous trouvez.", "en": "Congo: fufu, pondu and coffee. Bring back coffee if you find it."}, "CK": {"fr": "Un souvenir qui tient dans le bagage cabine. Les douanes vous remercient.", "en": "A souvenir that fits in your carry-on. Customs will thank you."}, "KR": {"fr": "Kimchi, K-pop et convenience stores. Rapportez du soju, du ginseng ou des snacks bizarres.", "en": "Kimchi, K-pop and convenience stores. Bring back soju, ginseng or weird snacks."}, "KP": {"fr": "Contexte particulier. Un jour, on pourra rapporter du kimchi de Pyongyang.", "en": "Specific context. One day we'll bring back Pyongyang kimchi."}, "CR": {"fr": "Gallo pinto, café et pura vida. Rapportez du café et du cacao.", "en": "Gallo pinto, coffee and pura vida. Bring back coffee and cocoa."}, "HR": {"fr": "Peka, truffe et Adriatique. Rapportez de l'huile, de la truffe ou de la rakija.", "en": "Peka, truffle and Adriatic. Bring back oil, truffle or rakija."}, "CU": {"fr": "Mojito, cigare et vieille Havane. Rapportez du rhum (et des cigares si douane OK).", "en": "Mojito, cigar and old Havana. Bring back rum (and cigars if customs allow)."}, "CW": {"fr": "Goûtez au fast-food local. Souvent surprenant.", "en": "Try the local fast food. Often surprising."}, "CI": {"fr": "Alloco, attiéké et zouk. Rapportez du cacao ou du café.", "en": "Alloco, attiéké and zouk. Bring back cocoa or coffee."}, "DK": {"fr": "Hygge, smørrebrød et vélo. Rapportez des licorice ou du fromage danois.", "en": "Hygge, smørrebrød and bikes. Bring back liquorice or Danish cheese."}, "DJ": {"fr": "Lac Assal et mer. Rapportez du sel du lac si vous y allez.", "en": "Lake Assal and sea. Bring back lake salt if you go."}, "DO": {"fr": "Mangú, rhum et bachata. Rapportez du Mamajuana ou du rhum Brugal.", "en": "Mangú, rum and bachata. Bring back Mamajuana or Brugal rum."}, "DM": {"fr": "Fruits tropicaux et cascades. Rapportez du rhum ou du cacao.", "en": "Tropical fruit and waterfalls. Bring back rum or cocoa."}, "EG": {"fr": "Koshari, thé et pyramides. Rapportez des épices ou du coton égyptien.", "en": "Koshari, tea and pyramids. Bring back spices or Egyptian cotton."}, "SV": {"fr": "Pupusas, café et volcans. Rapportez du café ou du rhum.", "en": "Pupusas, coffee and volcanoes. Bring back coffee or rum."}, "AE": {"fr": "Dattes et or. Rapportez des dattes (plus léger). Et un selfie au Burj.", "en": "Dates and gold. Bring back dates (lighter). And a Burj selfie."}, "EC": {"fr": "Ceviche, quinoa et Galápagos. Rapportez du chocolat ou du café. Et des photos d'iguanes.", "en": "Ceviche, quinoa and Galápagos. Bring back chocolate or coffee. And iguana photos."}, "ER": {"fr": "Café et mer Rouge. Rapportez du café érythréen si vous en trouvez.", "en": "Coffee and Red Sea. Bring back Eritrean coffee if you find it."}, "ES": {"fr": "Tapas, jamón et siesta. Rapportez du jamón (sous vide) ou du turrón. Ou les deux.", "en": "Tapas, jamón and siesta. Bring back jamón (vacuum-packed) or turrón. Or both."}, "EE": {"fr": "Sauna, pain noir et Tallinn. Rapportez du Vana Tallinn ou du chocolat Kalev.", "en": "Sauna, black bread and Tallinn. Bring back Vana Tallinn or Kalev chocolate."}, "US": {"fr": "Portions XXL, brunch et États variés. Rapportez du maple syrup (si Nord), du hot sauce ou du bourbon.", "en": "XXL portions, brunch and varied states. Bring back maple syrup (if North), hot sauce or bourbon."}, "ET": {"fr": "Café, injera et berceau de l'humanité. Rapportez du café. Le meilleur au monde, selon certains.", "en": "Coffee, injera and cradle of humankind. Bring back coffee. Best in the world, some say."}, "FK": {"fr": "Prenez une photo du plat le plus bizarre que vous osez commander.", "en": "Snap a photo of the weirdest dish you dare to order."}, "FJ": {"fr": "Lovo, kava et plongée. Rapportez du kava (vérifiez douanes) ou des perles.", "en": "Lovo, kava and diving. Bring back kava (check customs) or pearls."}, "FI": {"fr": "Sauna, réglisse salée et Nokia. Rapportez du Fazer (chocolat) ou de la salmiakki.", "en": "Sauna, salty liquorice and Nokia. Bring back Fazer chocolate or salmiakki."}, "FR": {"fr": "Fromage, vin et grève. Rapportez du fromage (dur à garder) ou du vin. Ou un saucisson.", "en": "Cheese, wine and strike. Bring back cheese (tricky to keep) or wine. Or saucisson."}, "FO": {"fr": "Un dessert typique. Les calories en déplacement ne comptent pas.", "en": "A typical dessert. Travel calories don't count."}, "GA": {"fr": "Poulet nyembwe et forêt. Rapportez du café ou du cacao.", "en": "Poulet nyembwe and forest. Bring back coffee or cocoa."}, "GM": {"fr": "Domoda et côte. Rapportez du cacahuète (beurre ou graines).", "en": "Domoda and coast. Bring back peanut butter or seeds."}, "GH": {"fr": "Jollof, fufu et cacao. Rapportez du cacao ou du kente (tissu).", "en": "Jollof, fufu and cocoa. Bring back cocoa or kente cloth."}, "GI": {"fr": "Goûtez au plat que les locaux mangent au petit-déj. Game changer.", "en": "Try what the locals eat for breakfast. Game changer."}, "GD": {"fr": "Épices, rhum et plage. Rapportez du rhum ou du chocolat (cacao local).", "en": "Spices, rum and beach. Bring back rum or chocolate (local cocoa)."}, "GL": {"fr": "Un fromage, une épice ou un alcool local. Les douanes autorisent (vérifiez).", "en": "Local cheese, spice or spirit. Customs allow (check first)."}, "GR": {"fr": "Ouzo, feta et îles. Rapportez de l'huile d'olive, du miel ou de l'ouzo.", "en": "Ouzo, feta and islands. Bring back olive oil, honey or ouzo."}, "GP": {"fr": "Un selfie devant le monument le plus kitsch du pays. Pour la postérité.", "en": "A selfie in front of the tackiest landmark. For posterity."}, "GU": {"fr": "Un souvenir qui tient dans le bagage cabine. Les douanes vous remercient.", "en": "A souvenir that fits in your carry-on. Customs will thank you."}, "GT": {"fr": "Pepian, café et Tikal. Rapportez du café. Et du rum Zacapa si la valise le permet.", "en": "Pepian, coffee and Tikal. Bring back coffee. And Zacapa rum if the bag allows."}, "GG": {"fr": "Goûtez au fast-food local. Souvent surprenant.", "en": "Try the local fast food. Often surprising."}, "GN": {"fr": "Riz jollof et musique. Rapportez du café ou des tissus.", "en": "Jollof rice and music. Bring back coffee or fabrics."}, "GQ": {"fr": "Chocolat et pétrole. Rapportez du cacao équatorial si vous trouvez.", "en": "Chocolate and oil. Bring back Equatorial cocoa if you find it."}, "GW": {"fr": "Caldou et côte. Rapportez du cajou ou du rhum.", "en": "Caldou and coast. Bring back cashews or rum."}, "GY": {"fr": "Rum, pepperpot et jungle. Rapportez du rhum Demerara ou du El Dorado.", "en": "Rum, pepperpot and jungle. Bring back Demerara or El Dorado rum."}, "GF": {"fr": "Un marché local > un centre commercial. Toujours.", "en": "A local market > a shopping mall. Always."}, "GE": {"fr": "Vin, khachapuri et montagnes. Rapportez du vin géorgien. Et du churchkhela.", "en": "Wine, khachapuri and mountains. Bring back Georgian wine. And churchkhela."}, "GS": {"fr": "Prenez une photo du plat le plus bizarre que vous osez commander.", "en": "Snap a photo of the weirdest dish you dare to order."}, "HT": {"fr": "Griot, rhum et compas. Rapportez du rhum Barbancourt. Incontournable.", "en": "Griot, rum and compas. Bring back Barbancourt rum. A must."}, "HM": {"fr": "Un marché local > un centre commercial. Toujours.", "en": "A local market > a shopping mall. Always."}, "HN": {"fr": "Baleada, café et ruines. Rapportez du café ou du rhum.", "en": "Baleada, coffee and ruins. Bring back coffee or rum."}, "HK": {"fr": "Trouvez le spot photo que les locaux utilisent. Pas celui de TripAdvisor.", "en": "Find the photo spot the locals use. Not the TripAdvisor one."}, "HU": {"fr": "Goulash, paprika et bains. Rapportez du paprika (en tube ou poudre) ou du Tokaji.", "en": "Goulash, paprika and baths. Bring back paprika (tube or powder) or Tokaji."}, "IN": {"fr": "Curry, chai et chaos organisé. Rapportez des épices, du thé ou des saris.", "en": "Curry, chai and organised chaos. Bring back spices, tea or saris."}, "IO": {"fr": "Trouvez le café / thé local. Votre réunion de 8h vous remerciera.", "en": "Find the local coffee or tea. Your 8am meeting will thank you."}, "ID": {"fr": "Nasi goreng, satay et îles. Rapportez du kopi luwak (si éthique) ou des épices.", "en": "Nasi goreng, satay and islands. Bring back kopi luwak (if ethical) or spices."}, "IR": {"fr": "Saffron, pistache et thé. Rapportez du safran, des pistaches ou de la confiture de rose.", "en": "Saffron, pistachio and tea. Bring back saffron, pistachios or rose jam."}, "IQ": {"fr": "Kebab, thé et histoire. Rapportez des dattes ou des épices (selon contexte).", "en": "Kebab, tea and history. Bring back dates or spices (depending on context)."}, "IE": {"fr": "Guinness, fish & chips et pluie. Rapportez du whiskey irlandais ou du cheddar.", "en": "Guinness, fish & chips and rain. Bring back Irish whiskey or cheddar."}, "IS": {"fr": "Skyr, hot dog et geysers. Rapportez du skyr (en poudre) ou du sel noir.", "en": "Skyr, hot dog and geysers. Bring back skyr (powder) or black salt."}, "IL": {"fr": "Falafel, hummus et mer. Rapportez du zaatar, des dattes ou du vin.", "en": "Falafel, hummus and sea. Bring back zaatar, dates or wine."}, "IT": {"fr": "Pizza, pasta et gesticulation. Rapportez du parmesan (sous vide), de l'huile ou du limoncello.", "en": "Pizza, pasta and hand gestures. Bring back parmesan (vacuum-packed), oil or limoncello."}, "JM": {"fr": "Jerk chicken, reggae et plage. Rapportez du rhum jamaïcain ou du Blue Mountain coffee.", "en": "Jerk chicken, reggae and beach. Bring back Jamaican rum or Blue Mountain coffee."}, "JP": {"fr": "Ramen, sushi et convenance. Rapportez du whisky japonais, du matcha ou des Kit Kat bizarres.", "en": "Ramen, sushi and convenience. Bring back Japanese whisky, matcha or weird Kit Kats."}, "JE": {"fr": "Le meilleur souvenir ? Ce que vous ne pouvez pas acheter à l'aéroport.", "en": "Best souvenir? Something you can't buy at the airport."}, "JO": {"fr": "Mansaf, thé et Pétra. Rapportez des dattes, du zaatar ou de la céramique.", "en": "Mansaf, tea and Petra. Bring back dates, zaatar or ceramics."}, "KZ": {"fr": "Beshbarmak et steppes. Rapportez du miel ou du kurt (fromage séché).", "en": "Beshbarmak and steppes. Bring back honey or kurt (dried cheese)."}, "KE": {"fr": "Nyama choma, safari et thé. Rapportez du café ou du thé. Et des photos de gnous.", "en": "Nyama choma, safari and tea. Bring back coffee or tea. And wildebeest photos."}, "KG": {"fr": "Laghman, kumis et montagnes. Rapportez du miel ou du felt. Oui, du feutre.", "en": "Laghman, kumis and mountains. Bring back honey or felt. Yes, felt."}, "KI": {"fr": "Goûtez au fast-food local. Souvent surprenant.", "en": "Try the local fast food. Often surprising."}, "KW": {"fr": "Machboos et tours. Rapportez des dattes ou du parfum (souks).", "en": "Machboos and towers. Bring back dates or perfume (souks)."}, "LA": {"fr": "Larb, café et Mékong. Rapportez du café lao ou de la soie.", "en": "Larb, coffee and Mekong. Bring back Lao coffee or silk."}, "LS": {"fr": "Braai et montagnes. Rapportez du mohair ou du chapeau basotho.", "en": "Braai and mountains. Bring back mohair or a Basotho hat."}, "LV": {"fr": "Riga black balsam et Art nouveau. Rapportez du Balsam ou du fromage caramélisé.", "en": "Riga black balsam and Art Nouveau. Bring back Balsam or caramelised cheese."}, "LB": {"fr": "Mezze, arak et cèdres. Rapportez du zaatar, de l'huile ou de l'arak.", "en": "Mezze, arak and cedars. Bring back zaatar, oil or arak."}, "LY": {"fr": "Thé et désert. Rapportez des dattes ou du miel (selon contexte).", "en": "Tea and desert. Bring back dates or honey (depending on context)."}, "LR": {"fr": "Jollof et côte. Rapportez du café ou du cacao.", "en": "Jollof and coast. Bring back coffee or cocoa."}, "LI": {"fr": "Fromage et ski. Rapportez du fromage (petit pays, grande fromagerie).", "en": "Cheese and ski. Bring back cheese (small country, big dairy)."}, "LT": {"fr": "Cepelinai et forêt. Rapportez du fromage ou de l'ambre (côte).", "en": "Cepelinai and forest. Bring back cheese or amber (coast)."}, "LU": {"fr": "Riesling, Gromperekichelcher et banques. Rapportez du vin ou du moutarde de Luxembourg.", "en": "Riesling, Gromperekichelcher and banks. Bring back wine or Luxembourg mustard."}, "MO": {"fr": "Rapportez une bouteille. Pas forcément d'alcool. Une sauce, un sirop…", "en": "Bring back a bottle. Doesn't have to be alcohol. A sauce, syrup…"}, "MK": {"fr": "Ajvar, rakija et lac Ohrid. Rapportez de l'ajvar (tube) ou du fromage kashkaval.", "en": "Ajvar, rakija and Lake Ohrid. Bring back ajvar (tube) or kashkaval cheese."}, "MG": {"fr": "Romazava, lémuriens et vanille. Rapportez de la vanille. La meilleure au monde.", "en": "Romazava, lemurs and vanilla. Bring back vanilla. Best in the world."}, "MY": {"fr": "Nasi lemak, laksa et tours. Rapportez du teh tarik (en poudre), du white coffee ou des durians (en soute, emballés).", "en": "Nasi lemak, laksa and towers. Bring back teh tarik (powder), white coffee or durians (hold, wrapped)."}, "MW": {"fr": "Nsima, lac Malawi et thé. Rapportez du thé ou du café.", "en": "Nsima, Lake Malawi and tea. Bring back tea or coffee."}, "MV": {"fr": "Mas huni, plongée et atolls. Rapportez du thon séché (mas) ou des perles.", "en": "Mas huni, diving and atolls. Bring back dried tuna (mas) or pearls."}, "ML": {"fr": "Thé touareg et Sahara. Rapportez du bogolan (tissu) ou des dattes.", "en": "Touareg tea and Sahara. Bring back bogolan cloth or dates."}, "MT": {"fr": "Pastizzi, fenek et Méditerranée. Rapportez du vin ou du kunserva (concentré tomate).", "en": "Pastizzi, fenek and Mediterranean. Bring back wine or kunserva (tomato paste)."}, "MP": {"fr": "Rapportez une carte postale. L'art du retro n'est pas mort.", "en": "Bring back a postcard. Retro isn't dead."}, "MA": {"fr": "Tagine, thé à la menthe et souks. Rapportez des épices, une lampe ou du cuir.", "en": "Tagine, mint tea and souks. Bring back spices, a lamp or leather."}, "MH": {"fr": "Rapportez une bouteille. Pas forcément d'alcool. Une sauce, un sirop…", "en": "Bring back a bottle. Doesn't have to be alcohol. A sauce, syrup…"}, "MQ": {"fr": "Un selfie devant le monument le plus kitsch du pays. Pour la postérité.", "en": "A selfie in front of the tackiest landmark. For posterity."}, "MU": {"fr": "Dholl puri, rhum et lagons. Rapportez du rhum ou de la vanille.", "en": "Dholl puri, rum and lagoons. Bring back rum or vanilla."}, "MR": {"fr": "Thé et désert. Rapportez des dattes ou du poisson séché.", "en": "Tea and desert. Bring back dates or dried fish."}, "YT": {"fr": "Un fromage, une épice ou un alcool local. Les douanes autorisent (vérifiez).", "en": "Local cheese, spice or spirit. Customs allow (check first)."}, "MX": {"fr": "Tacos, mezcal et Frida. Rapportez du mezcal, de la sauce Valentina ou du chocolat.", "en": "Tacos, mezcal and Frida. Bring back mezcal, Valentina sauce or chocolate."}, "FM": {"fr": "Le meilleur souvenir ? Ce que vous ne pouvez pas acheter à l'aéroport.", "en": "Best souvenir? Something you can't buy at the airport."}, "MD": {"fr": "Mamaliga, vin et grottes. Rapportez du vin moldave (sous-estimé) ou du fromage.", "en": "Mamaliga, wine and caves. Bring back Moldovan wine (underrated) or cheese."}, "MC": {"fr": "Barbajuan et yachts. Rapportez du fromage de chèvre ou du pain de Monaco.", "en": "Barbajuan and yachts. Bring back goat cheese or Monaco bread."}, "MN": {"fr": "Airag, viande et steppes. Rapportez du cachemire ou du fromage séché (si vous osez).", "en": "Airag, meat and steppes. Bring back cashmere or dried cheese (if you dare)."}, "MS": {"fr": "Trouvez le spot photo que les locaux utilisent. Pas celui de TripAdvisor.", "en": "Find the photo spot the locals use. Not the TripAdvisor one."}, "ME": {"fr": "Rakija, cevapi et Adriatique. Rapportez de la rakija ou du fromage njeguški.", "en": "Rakija, cevapi and Adriatic. Bring back rakija or njeguški cheese."}, "MZ": {"fr": "Piri-piri, prawns et plages. Rapportez du piri-piri ou des noix de cajou.", "en": "Piri-piri, prawns and beaches. Bring back piri-piri or cashews."}, "MM": {"fr": "Laphet (thé fermenté) et pagodes. Rapportez du laphet ou de la soie.", "en": "Laphet (fermented tea) and pagodas. Bring back laphet or silk."}, "NA": {"fr": "Braai, désert et safari. Rapportez du biltong (vérifiez douanes) ou des pierres semi-précieuses.", "en": "Braai, desert and safari. Bring back biltong (check customs) or semi-precious stones."}, "NR": {"fr": "Un dessert typique. Les calories en déplacement ne comptent pas.", "en": "A typical dessert. Travel calories don't count."}, "NI": {"fr": "Gallo pinto, nacatamal et volcans. Rapportez du café ou du rhum Flor de Caña.", "en": "Gallo pinto, nacatamal and volcanoes. Bring back coffee or Flor de Caña rum."}, "NE": {"fr": "Thé et Sahara. Rapportez des dattes ou du cuir.", "en": "Tea and Sahara. Bring back dates or leather."}, "NG": {"fr": "Jollof, pepper soup et mégapole. Rapportez du cacao, des épices ou de l'ankara (tissu).", "en": "Jollof, pepper soup and megacity. Bring back cocoa, spices or ankara cloth."}, "NU": {"fr": "Rapportez au moins une spécialité locale. Les collègues vous pardonneront le retard.", "en": "Bring back at least one local treat. Colleagues will forgive the delay."}, "NF": {"fr": "Un dessert typique. Les calories en déplacement ne comptent pas.", "en": "A typical dessert. Travel calories don't count."}, "NO": {"fr": "Brunost, saumon et fjords. Rapportez du brunost (fromage caramel) ou du aquavit.", "en": "Brunost, salmon and fjords. Bring back brunost (caramel cheese) or aquavit."}, "NC": {"fr": "Trouvez le café / thé local. Votre réunion de 8h vous remerciera.", "en": "Find the local coffee or tea. Your 8am meeting will thank you."}, "NZ": {"fr": "Pavlova, fish & chips et moutons. Rapportez du Manuka honey ou du vin. Et des photos de hobbits.", "en": "Pavlova, fish & chips and sheep. Bring back Manuka honey or wine. And hobbit photos."}, "NP": {"fr": "Dal bhat, thé et Himalaya. Rapportez du thé, des épices ou du pashmina.", "en": "Dal bhat, tea and Himalayas. Bring back tea, spices or pashmina."}, "OM": {"fr": "Dates, encens et désert. Rapportez de l'encens (frankincense), des dattes ou du halwa.", "en": "Dates, incense and desert. Bring back frankincense, dates or halwa."}, "UG": {"fr": "Matoke, Rolex (sandwich) et gorilles. Rapportez du café ou du vanille.", "en": "Matoke, Rolex (sandwich) and gorillas. Bring back coffee or vanilla."}, "UZ": {"fr": "Plov, thé et Route de la soie. Rapportez des tapis (petits), du miel ou des épices.", "en": "Plov, tea and Silk Road. Bring back (small) carpets, honey or spices."}, "PK": {"fr": "Biryani, chai et montagnes. Rapportez des épices, du thé ou du tissu.", "en": "Biryani, chai and mountains. Bring back spices, tea or fabric."}, "PW": {"fr": "Prenez une photo du plat le plus bizarre que vous osez commander.", "en": "Snap a photo of the weirdest dish you dare to order."}, "PS": {"fr": "Un dessert typique. Les calories en déplacement ne comptent pas.", "en": "A typical dessert. Travel calories don't count."}, "PA": {"fr": "Ceviche, sancocho et canal. Rapportez du café Geisha ou du rhum Seco.", "en": "Ceviche, sancocho and canal. Bring back Geisha coffee or Seco rum."}, "PG": {"fr": "Mumu, café et jungle. Rapportez du café ou du cacao.", "en": "Mumu, coffee and jungle. Bring back coffee or cocoa."}, "PY": {"fr": "Tereré, chipa et chutes. Rapportez du tereré (maté froid) ou du chipa.", "en": "Tereré, chipa and waterfalls. Bring back tereré (cold mate) or chipa."}, "NL": {"fr": "Stroopwafel, fromage et vélos. Rapportez des stroopwafels, du Gouda ou du genever.", "en": "Stroopwafel, cheese and bikes. Bring back stroopwafels, Gouda or genever."}, "PH": {"fr": "Adobo, halo-halo et 7000 îles. Rapportez du mangoustan (saison) ou du rhum Tanduay.", "en": "Adobo, halo-halo and 7000 islands. Bring back mangosteen (season) or Tanduay rum."}, "PN": {"fr": "Goûtez au plat que les locaux mangent au petit-déj. Game changer.", "en": "Try what the locals eat for breakfast. Game changer."}, "PL": {"fr": "Pierogi, vodka et châteaux. Rapportez de la vodka, du fromage oscypek ou du pain d'épices.", "en": "Pierogi, vodka and castles. Bring back vodka, oscypek cheese or gingerbread."}, "PF": {"fr": "Un dessert typique. Les calories en déplacement ne comptent pas.", "en": "A typical dessert. Travel calories don't count."}, "PR": {"fr": "Trouvez le spot photo que les locaux utilisent. Pas celui de TripAdvisor.", "en": "Find the photo spot the locals use. Not the TripAdvisor one."}, "PT": {"fr": "Pastéis de nata, bacalhau et tramway. Rapportez du porto, des pastéis (emballés) ou de l'huile.", "en": "Pastéis de nata, bacalhau and tram. Bring back port, pastéis (packaged) or oil."}, "PE": {"fr": "Ceviche, pisco et Machu Picchu. Rapportez du pisco, des épices ou de l'alpaga.", "en": "Ceviche, pisco and Machu Picchu. Bring back pisco, spices or alpaca."}, "QA": {"fr": "Machboos et tours. Rapportez des dattes ou du parfum.", "en": "Machboos and towers. Bring back dates or perfume."}, "RO": {"fr": "Sarmale, mamaliga et Dracula. Rapportez de la tuica, du fromage ou du miel.", "en": "Sarmale, mamaliga and Dracula. Bring back tuica, cheese or honey."}, "GB": {"fr": "Fish & chips, thé et queue. Rapportez du thé, des biscuits ou du cheddar.", "en": "Fish & chips, tea and queueing. Bring back tea, biscuits or cheddar."}, "RU": {"fr": "Vodka, blinis et froid. Rapportez de la vodka, du caviar (réglementé) ou du chocolat.", "en": "Vodka, blinis and cold. Bring back vodka, caviar (regulated) or chocolate."}, "RW": {"fr": "Brochettes, café et gorilles. Rapportez du café. L'un des meilleurs d'Afrique.", "en": "Brochettes, coffee and gorillas. Bring back coffee. One of Africa's best."}, "SY": {"fr": "Contexte particulier. Mezze et histoire attendront.", "en": "Specific context. Mezze and history will wait."}, "CF": {"fr": "Manioc et forêt. Rapportez du miel sauvage si disponible.", "en": "Cassava and forest. Bring back wild honey if available."}, "RE": {"fr": "Le meilleur souvenir ? Ce que vous ne pouvez pas acheter à l'aéroport.", "en": "Best souvenir? Something you can't buy at the airport."}, "EH": {"fr": "Rapportez une carte postale. L'art du retro n'est pas mort.", "en": "Bring back a postcard. Retro isn't dead."}, "BL": {"fr": "Rapportez une carte postale. L'art du retro n'est pas mort.", "en": "Bring back a postcard. Retro isn't dead."}, "KN": {"fr": "Rum et cricket. Rapportez du rhum ou des épices.", "en": "Rum and cricket. Bring back rum or spices."}, "SM": {"fr": "Piadina et Titano. Rapportez du fromage ou du vin (micro-État, grande table).", "en": "Piadina and Titano. Bring back cheese or wine (microstate, great food)."}, "MF": {"fr": "Trouvez le café / thé local. Votre réunion de 8h vous remerciera.", "en": "Find the local coffee or tea. Your 8am meeting will thank you."}, "SX": {"fr": "Un marché local > un centre commercial. Toujours.", "en": "A local market > a shopping mall. Always."}, "PM": {"fr": "Trouvez le spot photo que les locaux utilisent. Pas celui de TripAdvisor.", "en": "Find the photo spot the locals use. Not the TripAdvisor one."}, "VA": {"fr": "Un souvenir qui tient dans le bagage cabine. Les douanes vous remercient.", "en": "A souvenir that fits in your carry-on. Customs will thank you."}, "VC": {"fr": "Rum et plages. Rapportez du rhum ou du breadfruit (en conserve).", "en": "Rum and beaches. Bring back rum or breadfruit (tinned)."}, "SH": {"fr": "Trouvez le spot photo que les locaux utilisent. Pas celui de TripAdvisor.", "en": "Find the photo spot the locals use. Not the TripAdvisor one."}, "LC": {"fr": "Rum, bananes et Pitons. Rapportez du rhum ou du cacao.", "en": "Rum, bananas and Pitons. Bring back rum or cocoa."}, "SB": {"fr": "Poi, coco et plongée. Rapportez du cacao ou des coquillages (vérifiez).", "en": "Poi, coconut and diving. Bring back cocoa or shells (check)."}, "WS": {"fr": "Umu, kava et plages. Rapportez de la vanille ou du tapa.", "en": "Umu, kava and beaches. Bring back vanilla or tapa."}, "AS": {"fr": "Trouvez le café / thé local. Votre réunion de 8h vous remerciera.", "en": "Find the local coffee or tea. Your 8am meeting will thank you."}, "ST": {"fr": "Calulu et cacao. Rapportez du cacao ou du café.", "en": "Calulu and cocoa. Bring back cocoa or coffee."}, "RS": {"fr": "Ćevapi, rakija et Belgrade. Rapportez de la rakija ou du kajmak.", "en": "Ćevapi, rakija and Belgrade. Bring back rakija or kajmak."}, "SC": {"fr": "Rougaille, rhum et plages. Rapportez du rhum ou de la vanille.", "en": "Rougaille, rum and beaches. Bring back rum or vanilla."}, "SL": {"fr": "Jollof et côte. Rapportez du cacao ou du café.", "en": "Jollof and coast. Bring back cocoa or coffee."}, "SG": {"fr": "Laksa, hawker et Marina Bay. Rapportez du teh, du white pepper crab (en poudre) ou des snacks.", "en": "Laksa, hawker and Marina Bay. Bring back teh, white pepper (powder) or snacks."}, "SK": {"fr": "Bryndza, slivovitz et châteaux. Rapportez de la slivovitz ou du fromage de brebis.", "en": "Bryndza, slivovitz and castles. Bring back slivovitz or sheep cheese."}, "SI": {"fr": "Kranjska klobasa, vin et lac Bled. Rapportez du vin, du miel ou de la potica.", "en": "Kranjska klobasa, wine and Lake Bled. Bring back wine, honey or potica."}, "SO": {"fr": "Contexte fragile. Un jour : thé, bananes et plages.", "en": "Fragile context. One day: tea, bananas and beaches."}, "SD": {"fr": "Ful, thé et Nil. Rapportez des épices ou du sésame (tahini).", "en": "Ful, tea and Nile. Bring back spices or sesame (tahini)."}, "SS": {"fr": "Kisra et Nil. Rapportez du café ou du miel (selon contexte).", "en": "Kisra and Nile. Bring back coffee or honey (depending on context)."}, "LK": {"fr": "Curry, thé et plages. Rapportez du thé Ceylan ou des épices.", "en": "Curry, tea and beaches. Bring back Ceylon tea or spices."}, "CH": {"fr": "Fondue, chocolat et couteau suisse. Rapportez du chocolat. Ou un couteau. Ou les deux.", "en": "Fondue, chocolate and Swiss army knife. Bring back chocolate. Or a knife. Or both."}, "SR": {"fr": "Roti, pomme cythère et forêt. Rapportez du rhum ou des épices.", "en": "Roti, pomme cythère and forest. Bring back rum or spices."}, "SE": {"fr": "Fika, köttbullar et IKEA. Rapportez du surströmming (blague) ou du chocolat Marabou.", "en": "Fika, köttbullar and IKEA. Bring back surströmming (joke) or Marabou chocolate."}, "SJ": {"fr": "Rapportez au moins une spécialité locale. Les collègues vous pardonneront le retard.", "en": "Bring back at least one local treat. Colleagues will forgive the delay."}, "SZ": {"fr": "Sishwala, safari et culture. Rapportez du miel ou de l'artisanat.", "en": "Sishwala, safari and culture. Bring back honey or crafts."}, "SN": {"fr": "Thiéboudiène, bissap et teranga. Rapportez du bissap (sirop), des épices ou du thé kinkeliba.", "en": "Thiéboudiène, bissap and teranga. Bring back bissap (syrup), spices or kinkeliba tea."}, "TJ": {"fr": "Plov, thé et montagnes. Rapportez des noix, du miel ou du tissu brodé.", "en": "Plov, tea and mountains. Bring back nuts, honey or embroidered cloth."}, "TZ": {"fr": "Nyama choma, Zanzibar et Kilimandjaro. Rapportez du café, des épices ou du kitenge.", "en": "Nyama choma, Zanzibar and Kilimanjaro. Bring back coffee, spices or kitenge."}, "TW": {"fr": "Bubble tea, night markets et montagnes. Rapportez du thé, des gâteaux d'ananas ou des snacks.", "en": "Bubble tea, night markets and mountains. Bring back tea, pineapple cakes or snacks."}, "TD": {"fr": "La boule et Sahara. Rapportez des dattes ou du miel.", "en": "La boule and Sahara. Bring back dates or honey."}, "CZ": {"fr": "Bière, trdelník et châteaux. Rapportez de la Becherovka ou du fromage olomoucké.", "en": "Beer, trdelník and castles. Bring back Becherovka or olomoucké cheese."}, "TF": {"fr": "Une spécialité sucrée à rapporter. Le bureau vote.", "en": "A local sweet to bring back. The office votes."}, "TH": {"fr": "Pad thai, mango sticky rice et temples. Rapportez du curry paste (en tube) ou de la soie.", "en": "Pad thai, mango sticky rice and temples. Bring back curry paste (tube) or silk."}, "TL": {"fr": "Café et côte. Rapportez du café timorais (sous-estimé).", "en": "Coffee and coast. Bring back Timorese coffee (underrated)."}, "TG": {"fr": "Fufu, côte et vaudou. Rapportez du cacao ou du café.", "en": "Fufu, coast and voodoo. Bring back cocoa or coffee."}, "TK": {"fr": "Le meilleur souvenir ? Ce que vous ne pouvez pas acheter à l'aéroport.", "en": "Best souvenir? Something you can't buy at the airport."}, "TO": {"fr": "Lu, umu et plages. Rapportez du tapa (tissu) ou de la vanille.", "en": "Lu, umu and beaches. Bring back tapa cloth or vanilla."}, "TT": {"fr": "Doubles, roti et steel pan. Rapportez du rhum Angostura ou des épices.", "en": "Doubles, roti and steel pan. Bring back Angostura rum or spices."}, "TN": {"fr": "Couscous, harissa et médinas. Rapportez de l'harissa, des dattes ou de la céramique.", "en": "Couscous, harissa and medinas. Bring back harissa, dates or ceramics."}, "TM": {"fr": "Manti, tapis et désert. Rapportez un tapis (petit) ou des melons séchés.", "en": "Manti, carpets and desert. Bring back a (small) carpet or dried melons."}, "TC": {"fr": "Goûtez au plat que les locaux mangent au petit-déj. Game changer.", "en": "Try what the locals eat for breakfast. Game changer."}, "TR": {"fr": "Kebab, baklava et Bosphore. Rapportez du loukoum, des épices ou du café turc.", "en": "Kebab, baklava and Bosphorus. Bring back lokum, spices or Turkish coffee."}, "TV": {"fr": "Palusami et atolls. Rapportez de l'artisanat ou du poisson séché.", "en": "Palusami and atolls. Bring back crafts or dried fish."}, "UA": {"fr": "Borscht, vodka et steppes. Rapportez du chocolat, de la vodka ou du miel.", "en": "Borscht, vodka and steppes. Bring back chocolate, vodka or honey."}, "UY": {"fr": "Asado, mate et plages. Rapportez du dulce de leche, du vin tannat ou du mate.", "en": "Asado, mate and beaches. Bring back dulce de leche, tannat wine or mate."}, "VU": {"fr": "Lap lap, kava et volcans. Rapportez du kava (vérifiez douanes) ou du bœuf séché.", "en": "Lap lap, kava and volcanoes. Bring back kava (check customs) or dried beef."}, "VE": {"fr": "Arepas, cachapa et Angel Falls. Rapportez du café ou du cacao (selon contexte).", "en": "Arepas, cachapa and Angel Falls. Bring back coffee or cocoa (depending on context)."}, "VN": {"fr": "Pho, banh mi et baie d'Halong. Rapportez du café (weasel si vous osez), de la sauce nuoc mam ou de la soie.", "en": "Pho, banh mi and Halong Bay. Bring back coffee (weasel if you dare), nuoc mam or silk."}, "WF": {"fr": "Une spécialité sucrée à rapporter. Le bureau vote.", "en": "A local sweet to bring back. The office votes."}, "YE": {"fr": "Contexte difficile. Le miel yéménite attendra.", "en": "Difficult context. Yemeni honey will wait."}, "ZM": {"fr": "Nshima, chutes Victoria et bière. Rapportez du café ou du miel.", "en": "Nshima, Victoria Falls and beer. Bring back coffee or honey."}, "ZW": {"fr": "Sadza, safari et pierres. Rapportez du café, du thé ou de l'artisanat.", "en": "Sadza, safari and stones. Bring back coffee, tea or crafts."}, "AX": {"fr": "Un dessert typique. Les calories en déplacement ne comptent pas.", "en": "A typical dessert. Travel calories don't count."}, "IM": {"fr": "Le meilleur souvenir ? Ce que vous ne pouvez pas acheter à l'aéroport.", "en": "Best souvenir? Something you can't buy at the airport."}, "UM": {"fr": "Un marché local > un centre commercial. Toujours.", "en": "A local market > a shopping mall. Always."}, "VG": {"fr": "Goûtez au fast-food local. Souvent surprenant.", "en": "Try the local fast food. Often surprising."}, "VI": {"fr": "Prenez une photo du plat le plus bizarre que vous osez commander.", "en": "Snap a photo of the weirdest dish you dare to order."}};
+
+    // ——— Référentiel des textes de recommandations (à mettre à jour ici) ———
+    const TEXTS = {
+      personnes: {
+        avant: {
+          standard: [
+            'Réservations par Assistantes de direction, sauvegarde infos principales (transport/hébergement)',
+            'Préparation ID Sécurité par AD (contacts et procédures d\'urgence sur place)'
+          ],
+          orange_rouge: [
+            'Vérification par Assistante de direction couverture assurance rapatriement (support équipe RH)',
+            'Sauvegarde infos détaillées par AD (ensemble de l\'itinéraire et transports)',
+            'Vérification des prérequis auprès médecine du voyage par AD si risque épidémique',
+            'Orga briefing sécurité + mesures sécurité ad hoc sur place avec partenaires'
+          ],
+          validationOrange: 'Validation d\'un associé de la stratégie',
+          validationRouge: 'Validation du Management'
+        },
+        pendant: {
+          standard: [
+            'Conserver à tout moment sur soi l\'ID Sécurité',
+            'Si visite de site industriel : respect consignes sécurité, port des EPI',
+            'Signaler tout incident grave (accident, retard majeur, hospitalisation) à ICP',
+            'Respect des recos du Ministère des Affaires Etrangères le cas échéant'
+          ],
+          orange_rouge: [
+            'Respect des recos Ministères des Affaires Etrangères et du briefing sécurité',
+            'Visites chantiers / actifs isolés : signalées à l\'avance, jamais effectuées seul'
+          ]
+        },
+        apres: {
+          standard: [
+            'Si incident sur place non déclaré immédiatement, compte-rendu écrit ou oral',
+            'Consultation médicale si symptômes post-voyage'
+          ],
+          orange_rouge: [
+            'Si suspicion de contamination de retour de zone endémique : quarantaine (télétravail)'
+          ]
+        }
+      },
+      donnees: {
+        avantMicrosoft: 'L\'accès au tenant Microsoft depuis ce pays doit faire l\'objet d\'une demande préalable.',
+        effacerConversations: 'Effacer les conversations sensibles des applis iOS (WhatsApp, Signal, SMS, etc.) sur les terminaux personnels.',
+        effacerConversationsPro: 'Effacer les conversations sensibles des applis iOS (WhatsApp, Signal, SMS, etc.) sur les terminaux personnels. La DSI peut proposer un iPhone de prêt vide pour les usages personnels.',
+        avant: {
+          standard: [
+            'Mettre à jour tous les appareils (OS, antivirus, applications)',
+            'Modifier les codes PIN s\'ils sont simples à deviner (e.g. dates de naissance)'
+          ],
+          blocked: [
+            'Supprimer les données sensibles stockées localement sans synchro OneDrive'
+          ],
+          douane: []
+        },
+        pendant: {
+          blocked: [
+            'Garder PC et iPhone sous contrôle constant ; ne jamais laisser les appareils sans surveillance ni dans la chambre sans protection',
+            'Éteindre complètement les appareils quand temporairement laissés (pas de veille)',
+            'Refuser chargeurs, câbles ou accessoires fournis par des tiers',
+            'Ne jamais stocker d\'informations confidentielles dans la chambre ou sur les appareils sans chiffrement (clé usb, PC ou tablettes personnels)',
+            'Adopter une posture irréprochable en public et éviter toute invitation, cadeau ou situation non professionnelle',
+            'Signaler immédiatement tout comportement ou situation suspecte (interrogatoire, propositions ambiguës, incidents techniques, bugs ou incidents)'
+          ],
+          douane: [
+            'À la douane : coopérer, ne pas refuser l\'inspection même si intrusive ; réponse factuelle et professionnelle aux questions sur l\'activité et les appareils ; limiter les données stockées physiquement pour réduire les risques de fuite'
+          ],
+          douaneLineOnly: 'À la douane : coopérer, ne pas refuser l\'inspection même si intrusive ; réponse factuelle et professionnelle ; limiter les données stockées physiquement'
+        },
+        apres: {
+          standard: [
+            'Déclarer tout incident ou suspicion d\'incident',
+            'Débriefer et intégrer les retours d\'expérience pour améliorer la politique de sécurité'
+          ],
+          compromis: [
+            'Considérer les appareils comme compromis ; déclencher les procédures de réinitialisation (réinstallation complète)'
+          ]
+        },
+        proDouaneAvant: [
+          'La DSI peut, sur demande, vous mettre à disposition un iPhone vierge pour vos usages personnels pendant la durée du voyage. Celui-ci ne devra être synchronisé qu\'une fois la douane passée.'
+        ],
+        proDouaneApres: [
+          'Restituer l\'iPhone de prêt au service IT afin qu\'il soit effacé.'
+        ]
+      }
+    };
+
+    const TEXTS_EN = {
+      personnes: {
+        avant: {
+          standard: [
+            'Bookings by Executive Assistants, save main info (transport/accommodation)',
+            'Security ID preparation by EA (contacts and emergency procedures on site)'
+          ],
+          orange_rouge: [
+            'EA to verify repatriation insurance coverage (HR team support)',
+            'Detailed info backup by EA (full itinerary and transport)',
+            'EA to check travel medicine requirements if epidemic risk',
+            'Security briefing + ad hoc security measures on site with partners'
+          ],
+          validationOrange: 'Associate validation of strategy',
+          validationRouge: 'Management validation'
+        },
+        pendant: {
+          standard: [
+            'Always carry the Security ID',
+            'If visiting industrial site: follow safety instructions, wear PPE',
+            'Report any serious incident (accident, major delay, hospitalization) to ICP',
+            'Comply with Ministry of Foreign Affairs recommendations where applicable'
+          ],
+          orange_rouge: [
+            'Comply with Foreign Affairs and security briefing recommendations',
+            'Site/isolated asset visits: notified in advance, never carried out alone'
+          ]
+        },
+        apres: {
+          standard: [
+            'If on-site incident not reported immediately: written or oral report',
+            'Medical consultation if post-travel symptoms'
+          ],
+          orange_rouge: [
+            'If suspected contamination on return from endemic area: quarantine (remote work)'
+          ]
+        }
+      },
+      donnees: {
+        avantMicrosoft: 'Microsoft tenant access from this country must be requested in advance.',
+        effacerConversations: 'Erase sensitive conversations from iOS apps (WhatsApp, Signal, SMS, etc.) on personal devices.',
+        effacerConversationsPro: 'Erase sensitive conversations from iOS apps (WhatsApp, Signal, SMS, etc.) on personal devices. IT can provide a clean loan iPhone for personal use.',
+        avant: {
+          standard: [
+            'Update all devices (OS, antivirus, applications)',
+            'Change PIN codes if easy to guess (e.g. birth dates)'
+          ],
+          blocked: [
+            'Remove sensitive data stored locally without OneDrive sync'
+          ],
+          douane: []
+        },
+        pendant: {
+          blocked: [
+            'Keep PC and iPhone under constant control; never leave devices unattended or in the room without protection',
+            'Fully power off devices when temporarily left (no standby)',
+            'Refuse chargers, cables or accessories provided by third parties',
+            'Never store confidential information in the room or on devices without encryption (USB key, PC or personal tablets)',
+            'Maintain irreproachable conduct in public and avoid any invitation, gift or unprofessional situation',
+            'Immediately report any suspicious behaviour or situation (questioning, ambiguous proposals, technical incidents, bugs or events)'
+          ],
+          douane: [
+            'At customs: cooperate, do not refuse inspection even if intrusive; factual and professional answers on activity and devices; limit physically stored data to reduce leakage risk'
+          ],
+          douaneLineOnly: 'At customs: cooperate, do not refuse inspection even if intrusive; factual and professional response; limit physically stored data'
+        },
+        apres: {
+          standard: [
+            'Report any incident or suspected incident',
+            'Debrief and incorporate feedback to improve security policy'
+          ],
+          compromis: [
+            'Consider devices compromised; trigger reset procedures (full reinstallation)'
+          ]
+        },
+        proDouaneAvant: [
+          'IT can, on request, provide you with a clean iPhone for your personal use during the trip. It should only be synced once customs has been cleared.'
+        ],
+        proDouaneApres: [
+          'Return the loan iPhone to the IT department so that it can be wiped.'
+        ]
+      }
+    };
+
+    const UI = {
+      fr: {
+        title: 'Guide voyage',
+        intro: 'Pays et type de voyage → consignes avant, pendant et après.',
+        labelPays: 'Pays de destination',
+        placeholderSearch: 'Nom ou code pays (ex. France, FR) — 2 car. min.',
+        hintSearch: 'Tapez au moins 2 caractères pour rechercher',
+        noResult: 'Aucun pays trouvé',
+        labelType: 'Type de voyage',
+        typePro: 'Professionnel',
+        typePerso: 'Personnel',
+        sectionPersonnes: 'Risque sur les personnes',
+        sectionDonnees: 'Risque sur les données (appareils et accès cloud)',
+        sectionForfait: 'Risques hors forfait',
+        phaseAvant: 'Avant le voyage',
+        phasePendant: 'Pendant le voyage',
+        phaseApres: 'Après le voyage',
+        phaseAvantShort: 'Avant',
+        phasePendantShort: 'Pendant',
+        phaseApresShort: 'Après',
+        forfaitOlafly: 'Prendre une carte SIM spécifique Olafly : la destination n\'est pas couverte par le forfait de base.',
+        forfaitRien: 'Aucun risque hors forfait identifié pour cette destination.',
+        badgePersonnes: 'Risque personnes',
+        badgeMicrosoft: 'Accès Microsoft bloqués',
+        badgeDouane: 'Risque vol de données au passage à la douane',
+        badgeDonnees: 'Vol / compromission données en voyage',
+        badgeOlafly: 'SIM Olafly nécessaire',
+        noConsigne: 'Aucune consigne.',
+        commentsLabel: 'Régions / forfait 4G :',
+        clearPays: 'Effacer la sélection',
+        emptyStateMessage: 'Sélectionnez un pays pour afficher les consignes.',
+        travelTypeLabel: 'Type de voyage :',
+        tipLabel: 'En bref :'
+      },
+      en: {
+        title: 'Travel guide',
+        intro: 'Country and travel type → guidelines before, during and after.',
+        labelPays: 'Destination country',
+        placeholderSearch: 'Country name or code (e.g. France, FR) — min. 2 chars',
+        hintSearch: 'Type at least 2 characters to search',
+        noResult: 'No country found',
+        labelType: 'Travel type',
+        typePro: 'Business',
+        typePerso: 'Personal',
+        sectionPersonnes: 'Risk to persons',
+        sectionDonnees: 'Risk to data (devices and cloud access)',
+        sectionForfait: 'Out-of-plan risks',
+        phaseAvant: 'Before travel',
+        phasePendant: 'During travel',
+        phaseApres: 'After travel',
+        phaseAvantShort: 'Before',
+        phasePendantShort: 'During',
+        phaseApresShort: 'After',
+        forfaitOlafly: 'Use a specific Olafly SIM card: destination not covered by base plan.',
+        forfaitRien: 'No out-of-plan risk identified for this destination.',
+        badgePersonnes: 'Person risk',
+        badgeMicrosoft: 'Microsoft access blocked',
+        badgeDouane: 'Data theft risk at customs',
+        badgeDonnees: 'Data theft/compromise during travel',
+        badgeOlafly: 'Olafly SIM needed',
+        noConsigne: 'No guidelines.',
+        commentsLabel: 'Regions / 4G plan:',
+        clearPays: 'Clear selection',
+        emptyStateMessage: 'Select a country to display the guidelines.',
+        travelTypeLabel: 'Travel type:',
+        tipLabel: 'Quick tip:'
+      }
+    };
+
+    let lang = 'fr';
+
+    function t() { return UI[lang] || UI.fr; }
+    function texts() { return lang === 'en' ? TEXTS_EN : TEXTS; }
+
+    function renderPhase(phaseClass, title, items) {
+      if (!items || items.length === 0) return '';
+      const lis = items.map(i => '<li>' + escapeHtml(i) + '</li>').join('');
+      return '<div class="phase ' + phaseClass + '"><div class="phase-title">' + escapeHtml(title) + '</div><ul>' + lis + '</ul></div>';
+    }
+
+    const paysSearch = document.getElementById('pays-search');
+    const paysHidden = document.getElementById('pays');
+    const paysClear = document.getElementById('pays-clear');
+    const paysDropdown = document.getElementById('pays-dropdown');
+    const paysDropdownHint = document.getElementById('pays-dropdown-hint');
+    const paysDropdownEmpty = document.getElementById('pays-dropdown-empty');
+    const paysDropdownList = document.getElementById('pays-dropdown-list');
+    const paysBadgesRow = document.getElementById('pays-badges-row');
+    const travelTypeBadge = document.getElementById('travel-type-badge');
+    const selectType = document.getElementById('type');
+    const result = document.getElementById('result');
+    const emptyStateEl = document.getElementById('empty-state');
+    const paysTipEl = document.getElementById('pays-tip');
+    const contentPersonnes = document.getElementById('content-personnes');
+    const contentDonnees = document.getElementById('content-donnees');
+    const contentForfait = document.getElementById('content-forfait');
+    const pageTitle = document.getElementById('page-title');
+    const pageIntro = document.getElementById('page-intro');
+    const sectionPersonnesTitle = document.querySelector('#section-personnes h2');
+    const sectionDonneesTitle = document.querySelector('#section-donnees h2');
+    const sectionForfaitTitle = document.querySelector('#section-forfait h2');
+
+    const MIN_CHARS = 2;
+    let dropdownItems = [];
+    let highlightedIndex = -1;
+    let filterTimeout = null;
+
+    function normalizeForSearch(s) {
+      return (s || '').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').trim();
+    }
+
+    function matchPays(q, p) {
+      const s = normalizeForSearch(q);
+      if (!s) return true;
+      const nom = normalizeForSearch(p.nom);
+      const nomEN = normalizeForSearch(p.nomEN);
+      const code = (p.code || '').toLowerCase();
+      return nom.includes(s) || nomEN.includes(s) || code.startsWith(s);
+    }
+
+    function displayName(p) {
+      return (lang === 'en' && p.nomEN ? p.nomEN : p.nom) + ' (' + p.code + ')';
+    }
+
+    function codeToFlag(code) {
+      if (!code || typeof code !== 'string' || code.length !== 2) return '';
+      const c = code.toUpperCase();
+      return String.fromCodePoint(...[...c].map(ch => 0x1F1E6 - 65 + ch.charCodeAt(0)));
+    }
+
+    function buildDropdownOnce() {
+      paysDropdownList.innerHTML = '';
+      PAYS.forEach((p, i) => {
+        const div = document.createElement('div');
+        div.className = 'pays-dropdown-item';
+        div.setAttribute('role', 'option');
+        div.setAttribute('data-code', p.code);
+        div.setAttribute('data-index', String(i));
+        const name = lang === 'en' && p.nomEN ? p.nomEN : p.nom;
+        div.innerHTML = escapeHtml(name) + ' <small>' + escapeHtml(p.code) + '</small>';
+        div.addEventListener('click', () => selectPaysByCode(p.code));
+        div.addEventListener('mouseenter', () => {
+          highlightedIndex = i;
+          dropdownItems.forEach((node, j) => node.classList.toggle('highlight', j === i));
+        });
+        paysDropdownList.appendChild(div);
+      });
+      dropdownItems = paysDropdownList.querySelectorAll('.pays-dropdown-item');
+    }
+
+    function selectPaysByCode(code) {
+      const p = PAYS.find(x => x.code === code);
+      if (!p) return;
+      paysHidden.value = p.code;
+      paysSearch.value = displayName(p);
+      paysDropdown.classList.remove('visible');
+      paysSearch.blur();
+      highlightedIndex = -1;
+      updateClearButton();
+      render();
+      result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function updateClearButton() {
+      paysClear.classList.toggle('visible', !!paysHidden.value);
+    }
+
+    function applyLang() {
+      const u = t();
+      pageTitle.textContent = u.title;
+      pageIntro.textContent = u.intro;
+      document.getElementById('label-pays').textContent = u.labelPays;
+      document.getElementById('label-type').textContent = u.labelType;
+      paysSearch.placeholder = u.placeholderSearch;
+      paysDropdownHint.textContent = u.hintSearch;
+      paysDropdownEmpty.textContent = u.noResult;
+      selectType.options[0].text = u.typePro;
+      selectType.options[1].text = u.typePerso;
+      sectionPersonnesTitle.textContent = u.sectionPersonnes;
+      sectionDonneesTitle.textContent = u.sectionDonnees;
+      sectionForfaitTitle.textContent = u.sectionForfait;
+      document.getElementById('pays-clear').setAttribute('aria-label', u.clearPays);
+      document.documentElement.lang = lang;
+      document.title = u.title;
+      emptyStateEl.textContent = u.emptyStateMessage;
+      buildDropdownOnce();
+      if (paysHidden.value) {
+        const p = PAYS.find(x => x.code === paysHidden.value);
+        if (p) paysSearch.value = displayName(p);
+      }
+      updateClearButton();
+      render();
+    }
+
+    function runFilter() {
+      let q = paysSearch.value.trim();
+      if (!q) {
+        paysHidden.value = '';
+        paysDropdown.classList.remove('visible');
+        updateClearButton();
+        render();
+      }
+      if (q.length < MIN_CHARS) {
+        paysDropdownHint.style.display = 'block';
+        paysDropdownEmpty.style.display = 'none';
+        dropdownItems.forEach(el => el.classList.add('hidden'));
+        paysDropdown.classList.add('visible');
+        return;
+      }
+      if (q.includes(' (')) q = q.split(' (')[0].trim();
+      paysDropdownHint.style.display = 'none';
+      let firstVisible = -1;
+      dropdownItems.forEach((el, i) => {
+        const show = matchPays(q, PAYS[i]);
+        el.classList.toggle('hidden', !show);
+        if (show && firstVisible < 0) firstVisible = i;
+      });
+      if (firstVisible < 0) {
+        paysDropdownEmpty.style.display = 'block';
+        paysDropdown.classList.add('visible');
+        highlightedIndex = -1;
+        return;
+      }
+      paysDropdownEmpty.style.display = 'none';
+      highlightedIndex = firstVisible;
+      dropdownItems.forEach((el, i) => el.classList.toggle('highlight', i === firstVisible));
+      paysDropdown.classList.add('visible');
+      dropdownItems[firstVisible].scrollIntoView({ block: 'nearest' });
+    }
+
+    function filterDropdown() {
+      if (filterTimeout) clearTimeout(filterTimeout);
+      filterTimeout = setTimeout(runFilter, 80);
+    }
+
+    function moveHighlight(delta) {
+      const visible = Array.from(dropdownItems).map((el, i) => ({ el, i })).filter(({ el }) => !el.classList.contains('hidden'));
+      if (visible.length === 0) return;
+      let visIdx = visible.findIndex(({ i }) => i === highlightedIndex);
+      visIdx = (visIdx + delta + visible.length) % visible.length;
+      const { el, i } = visible[visIdx];
+      highlightedIndex = i;
+      dropdownItems.forEach((node, j) => node.classList.toggle('highlight', j === i));
+      el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    paysSearch.addEventListener('input', () => filterDropdown());
+    paysSearch.addEventListener('focus', () => {
+      const q = paysSearch.value.trim();
+      if (q.length < MIN_CHARS) {
+        paysDropdownHint.style.display = 'block';
+        paysDropdownEmpty.style.display = 'none';
+        dropdownItems.forEach(el => el.classList.add('hidden'));
+        paysDropdown.classList.add('visible');
+      } else runFilter();
+    });
+    paysSearch.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        paysDropdown.classList.remove('visible');
+        paysSearch.blur();
+        return;
+      }
+      if (!paysDropdown.classList.contains('visible')) return;
+      if (e.key === 'ArrowDown') { e.preventDefault(); moveHighlight(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); moveHighlight(-1); }
+      else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (highlightedIndex >= 0 && dropdownItems[highlightedIndex] && !dropdownItems[highlightedIndex].classList.contains('hidden')) {
+          selectPaysByCode(PAYS[highlightedIndex].code);
+        }
+      }
+    });
+    paysClear.addEventListener('click', () => {
+      paysHidden.value = '';
+      paysSearch.value = '';
+      paysSearch.focus();
+      paysDropdown.classList.remove('visible');
+      updateClearButton();
+      render();
+    });
+    document.addEventListener('click', (e) => {
+      if (!paysSearch.contains(e.target) && !paysDropdown.contains(e.target) && !paysClear.contains(e.target)) {
+        paysDropdown.classList.remove('visible');
+      }
+    });
+
+    function render() {
+      const code = paysHidden.value;
+      const typeVoyage = selectType.value;
+      const isPro = typeVoyage === 'pro';
+
+      if (!code) {
+        result.classList.remove('visible');
+        emptyStateEl.style.display = 'block';
+        travelTypeBadge.style.display = 'none';
+        paysBadgesRow.style.display = 'none';
+        paysTipEl.style.display = 'none';
+        contentPersonnes.innerHTML = '';
+        contentDonnees.innerHTML = '';
+        contentForfait.innerHTML = '';
+        return;
+      }
+      emptyStateEl.style.display = 'none';
+
+      const pays = PAYS.find(p => p.code === code);
+      if (!pays) return;
+
+      const u = t();
+      const tx = texts();
+      result.classList.add('visible');
+      travelTypeBadge.innerHTML = u.travelTypeLabel + ' <strong>' + (isPro ? u.typePro : u.typePerso) + '</strong>';
+      travelTypeBadge.style.display = 'block';
+
+      // ——— Bandeau indicateurs : 3 niveaux (critique / attention / info) ———
+      const indicators = [];
+      const rc = String(pays.riskColor || '').trim().toLowerCase();
+      indicators.push({
+        level: rc === 'red' || rc === 'rouge' ? 'critique' : rc === 'orange' ? 'attention' : 'standard',
+        label: u.badgePersonnes
+      });
+      if (pays.blocked) indicators.push({ level: 'critique', label: u.badgeMicrosoft });
+      if (pays.cleanDevice) indicators.push({ level: 'attention', label: u.badgeDouane });
+      if (pays.cleanOnReturn) indicators.push({ level: 'attention', label: u.badgeDonnees });
+      if (pays.olaflySim) indicators.push({ level: 'info', label: '📱 ' + u.badgeOlafly });
+      const flag = codeToFlag(pays.code);
+      const nameHtml = escapeHtml(displayName(pays));
+      paysBadgesRow.innerHTML =
+        '<div class="pays-banner-header"><span class="pays-banner-flag" aria-hidden="true">' + (flag || '') + '</span><span class="pays-banner-name">' + nameHtml + '</span></div>' +
+        '<div class="pays-badges-indicators">' +
+        indicators.map(ind =>
+          '<div class="indicator"><span class="dot ' + escapeHtml(ind.level) + '"></span><span>' + escapeHtml(ind.label) + '</span></div>'
+        ).join('') +
+        '</div>';
+      paysBadgesRow.style.display = 'block';
+
+      // ——— Risque sur les personnes : une seule réponse consolidée (Avant / Pendant / Après) ———
+      const isOrangeRouge = rc === 'orange' || rc === 'red' || rc === 'rouge';
+      let pAvant = tx.personnes.avant.standard.concat(isOrangeRouge ? tx.personnes.avant.orange_rouge : []);
+      if (isOrangeRouge) {
+        pAvant = pAvant.concat(rc === 'orange' ? [tx.personnes.avant.validationOrange] : [tx.personnes.avant.validationRouge]);
+      }
+      const pPendant = tx.personnes.pendant.standard.concat(isOrangeRouge ? tx.personnes.pendant.orange_rouge : []);
+      const pApres = tx.personnes.apres.standard.concat(isOrangeRouge ? tx.personnes.apres.orange_rouge : []);
+      contentPersonnes.innerHTML =
+        renderPhase('phase-avant', u.phaseAvant, pAvant) +
+        renderPhase('phase-pendant', u.phasePendant, pPendant) +
+        renderPhase('phase-apres', u.phaseApres, pApres);
+      document.getElementById('section-personnes').classList.remove('empty');
+
+      // ——— Risque sur les données : cumul des risques (blocked + cleanDevice possibles) ———
+      let dAvant = tx.donnees.avant.standard.slice();
+      let dPendant = [];
+      let dApres = tx.donnees.apres.standard.slice();
+      if (pays.blocked) {
+        const effacerBlocked = (isPro && !pays.cleanDevice) ? tx.donnees.effacerConversationsPro : tx.donnees.effacerConversations;
+        dAvant = dAvant.concat([tx.donnees.avantMicrosoft]).concat(tx.donnees.avant.blocked).concat([effacerBlocked]);
+        dPendant = dPendant.concat(tx.donnees.pendant.blocked);
+        if (!pays.cleanDevice) {
+          dPendant = dPendant.concat([tx.donnees.pendant.douaneLineOnly]);
+        }
+      }
+      if (pays.cleanDevice) {
+        if (!pays.blocked) {
+          const effacerDouane = (isPro && !pays.cleanDevice) ? tx.donnees.effacerConversationsPro : tx.donnees.effacerConversations;
+          dAvant = dAvant.concat([effacerDouane]);
+        }
+        dPendant = dPendant.concat(tx.donnees.pendant.douane);
+      }
+      if (pays.blocked || pays.cleanOnReturn) {
+        dApres = dApres.concat(tx.donnees.apres.compromis);
+      }
+      if (isPro && pays.cleanDevice) {
+        dAvant = dAvant.concat(tx.donnees.proDouaneAvant);
+        dApres = dApres.concat(tx.donnees.proDouaneApres);
+      }
+      contentDonnees.innerHTML =
+        renderPhase('phase-avant', u.phaseAvantShort, dAvant) +
+        renderPhase('phase-pendant', u.phasePendantShort, dPendant) +
+        renderPhase('phase-apres', u.phaseApresShort, dApres);
+      document.getElementById('section-donnees').classList.remove('empty');
+
+      // ——— Risques hors forfait ———
+      const itemsForfait = pays.olaflySim ? [u.forfaitOlafly] : [u.forfaitRien];
+      setContent(contentForfait, itemsForfait, 'section-forfait', pays.comments);
+
+      sectionPersonnesTitle.textContent = u.sectionPersonnes;
+      sectionDonneesTitle.textContent = u.sectionDonnees;
+      sectionForfaitTitle.textContent = u.sectionForfait;
+
+      const tipData = TIPS[pays.code] || TIPS[(pays.code || '').toUpperCase().slice(0, 2)];
+      if (tipData && paysTipEl) {
+        const tipText = lang === 'en' ? tipData.en : tipData.fr;
+        paysTipEl.innerHTML = '<strong>' + escapeHtml(u.tipLabel) + '</strong> ' + escapeHtml(tipText);
+        paysTipEl.style.display = 'block';
+      } else if (paysTipEl) {
+        paysTipEl.style.display = 'none';
+      }
+    }
+
+    function setContent(el, items, sectionId, comments) {
+      const section = document.getElementById(sectionId);
+      const u = t();
+      if (items.length === 0 && !comments) {
+        el.innerHTML = '<p>' + escapeHtml(u.noConsigne) + '</p>';
+        section.classList.add('empty');
+        return;
+      }
+      section.classList.remove('empty');
+      let html = '<ul>' + items.map(i => '<li>' + escapeHtml(i) + '</li>').join('') + '</ul>';
+      if (comments) {
+        html += '<div class="comments-box"><strong>' + escapeHtml(u.commentsLabel) + '</strong> ' + escapeHtml(comments) + '</div>';
+      }
+      el.innerHTML = html;
+    }
+
+    function escapeHtml(s) {
+      const div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    selectType.addEventListener('change', render);
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const newLang = btn.getAttribute('data-lang');
+        if (!newLang || newLang === lang) return;
+        lang = newLang;
+        document.querySelectorAll('.lang-btn').forEach(b => {
+          const isActive = b.getAttribute('data-lang') === lang;
+          b.classList.toggle('active', isActive);
+          b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+        applyLang();
+      });
+    });
+
+    applyLang();
+  </script>
+</body>
+</html>
