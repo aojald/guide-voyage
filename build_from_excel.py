@@ -10,6 +10,7 @@ import json
 import re
 import os
 from pathlib import Path
+from datetime import datetime
 
 try:
     from country_tips import build_tips_json
@@ -20,6 +21,8 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 EXCEL_PATH = SCRIPT_DIR / "referentiel_données.xlsx"
 TEMPLATE_PATH = SCRIPT_DIR / "index_template.html"
 OUTPUT_HTML = SCRIPT_DIR / "index.html"
+MAE_SLUGS_JSON = SCRIPT_DIR / "mae_slugs.json"
+MAE_OVERRIDE_JSON = SCRIPT_DIR / "mae_slugs_override.json"
 
 
 def col_letter_to_idx(ref):
@@ -171,6 +174,17 @@ def main():
         html = html.replace("__TIPS_JSON__", tips_json)
     elif "__TIPS_JSON__" in template:
         html = html.replace("__TIPS_JSON__", "{}")
+
+    if "__MAE_SLUGS_JSON__" in template:
+        mae_slugs = json.loads(MAE_SLUGS_JSON.read_text(encoding="utf-8")) if MAE_SLUGS_JSON.exists() else {}
+        html = html.replace("__MAE_SLUGS_JSON__", json.dumps(mae_slugs, ensure_ascii=False))
+    if "__MAE_OVERRIDE_JSON__" in template:
+        mae_override = json.loads(MAE_OVERRIDE_JSON.read_text(encoding="utf-8")) if MAE_OVERRIDE_JSON.exists() else {}
+        html = html.replace("__MAE_OVERRIDE_JSON__", json.dumps(mae_override, ensure_ascii=False))
+
+    generation_date = datetime.now().strftime("%d/%m/%Y à %H:%M")
+    if "__GENERATION_DATE__" in html:
+        html = html.replace("__GENERATION_DATE__", generation_date)
 
     OUTPUT_HTML.write_text(html, encoding="utf-8")
     print(f"Généré : {OUTPUT_HTML} ({len(rows)} pays)")

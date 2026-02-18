@@ -1,0 +1,60 @@
+Pays sans match MAE (56 sur 249)
+
+Code | Nom (FR)
+-----|--------
+AI   | Anguilla
+AW   | Aruba
+BM   | Bermudes
+BQ   | Bonaire, Saint-Eustache et Saba
+BV   | Bouvet, Ile
+KY   | Caïmans, Iles
+CX   | Christmas, île
+CC   | Cocos/Keeling (Îles)
+CW   | Curaçao
+FK   | Falkland/Malouines (Îles)
+FR   | France
+FO   | Féroé, îles
+GI   | Gibraltar
+GP   | Guadeloupe
+GU   | Guam
+GG   | Guernesey
+GF   | Guyane française
+GS   | Géorgie du sud et les îles Sandwich du sud
+HM   | Heard, Ile et MacDonald, îles
+IO   | Indien (Territoire britannique de l'océan)
+JE   | Jersey
+KI   | Kiribati
+LI   | Liechtenstein
+MP   | Mariannes du nord, Iles
+MH   | Marshall, Iles
+MQ   | Martinique
+YT   | Mayotte
+FM   | Micronésie, Etats Fédérés de
+MS   | Montserrat
+NR   | Nauru
+NU   | Niue
+NF   | Norfolk, Ile
+NC   | Nouvelle-Calédonie
+PS   | Palestine, Etat de
+PN   | Pitcairn
+PF   | Polynésie française
+PR   | Porto Rico
+RE   | Réunion
+EH   | Sahara occidental
+BL   | Saint-Barthélemy
+MF   | Saint-Martin (partie française)
+SX   | Saint-Martin (partie néerlandaise)
+PM   | Saint-Pierre-et-Miquelon
+VA   | Saint-Siège
+AS   | Samoa américaines
+SJ   | Svalbard et île Jan Mayen
+TF   | Terres australes françaises
+TK   | Tokelau
+TC   | Turks-et-Caïcos (Îles)
+TV   | Tuvalu
+WF   | Wallis et Futuna
+AX   | Åland, Îles
+IM   | Île de Man
+UM   | Îles mineures éloignées des Etats-Unis
+VG   | Îles vierges britanniques
+VI   | Îles vierges des Etats-Unis

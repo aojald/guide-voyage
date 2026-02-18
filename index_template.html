@@ -88,7 +88,33 @@
     .section .subsec:first-child { margin-top: 0; }
     .section.empty .content { color: #8898aa; font-style: italic; }
 
-    /* Blocs Avant / Pendant / Après — visuels et percutants */
+    /* Trois blocs : Avant / Pendant / Après — chacun avec Personnes et Data/Forfait */
+    .phase-block {
+      margin-bottom: 1.25rem; background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .phase-block h2 {
+      margin: 0; padding: 0.65rem 1rem; font-size: 0.9375rem; font-weight: 700;
+      color: var(--primary); border-bottom: 1px solid var(--border); letter-spacing: 0.02em;
+    }
+    .phase-block.phase-avant h2 { background: var(--teal-bg); color: #0f766e; border-bottom-color: rgba(13,148,136,0.3); }
+    .phase-block.phase-pendant h2 { background: var(--amber-bg); color: #b45309; border-bottom-color: rgba(217,119,6,0.3); }
+    .phase-block.phase-apres h2 { background: var(--indigo-bg); color: #4338ca; border-bottom-color: rgba(79,70,229,0.3); }
+    .phase-subblock {
+      padding: 0.65rem 1rem; border-bottom: 1px solid var(--border);
+    }
+    .phase-subblock:last-child { border-bottom: none; }
+    .phase-subblock h3 {
+      margin: 0 0 0.4rem 0; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+    .phase-subblock .content { margin: 0; }
+    .phase-subblock .content ul { margin: 0; padding-left: 1.1rem; }
+    .phase-subblock .content li { margin-bottom: 0.3rem; font-size: 0.875rem; color: var(--text-muted); }
+    .phase-subblock .content .reco-mae-link { font-size: 0.8em; margin-left: 0.35rem; white-space: nowrap; }
+    .phase-subblock.empty .content { color: #8898aa; font-style: italic; font-size: 0.875rem; }
+
+    /* Blocs Avant / Pendant / Après — visuels et percutants (phases internes) */
     .phase {
       margin-top: 0.85rem; padding: 0.75rem 1rem; border-radius: 8px; border-left: 4px solid;
     }
@@ -126,6 +152,11 @@
     }
     .pays-banner-flag { font-size: 1.5rem; line-height: 1; }
     .pays-banner-name { letter-spacing: 0.01em; }
+    .pays-banner-mae {
+      margin-left: 0.75rem; font-size: 0.75rem; font-weight: 500; color: rgba(255,255,255,0.9);
+      text-decoration: underline; white-space: nowrap;
+    }
+    .pays-banner-mae:hover { color: #fff; }
     .pays-badges-indicators {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.5rem 1rem;
       padding: 0.85rem 1rem;
@@ -207,6 +238,10 @@
     .pays-dropdown-item small { color: var(--text-muted); margin-left: 0.4rem; font-size: 0.8125rem; }
     .pays-dropdown-item.hidden { display: none !important; }
 
+    .page-footer {
+      margin-top: 2rem; padding: 0.75rem 1rem; font-size: 0.75rem; color: var(--text-muted);
+      text-align: center; border-top: 1px solid var(--border);
+    }
     @media print {
       .page-header .lang-switch, .form, .field-pays .pays-clear, .empty-state { display: none !important; }
       .page-header { padding: 0.5rem 0; margin-bottom: 0.5rem; }
@@ -278,17 +313,38 @@
     <div id="result" class="result">
       <div id="pays-badges-row" class="pays-badges" style="display: none;"></div>
       <div id="travel-type-badge" class="travel-type-badge" aria-hidden="true"></div>
-      <div id="section-personnes" class="section">
-        <h2>Risque sur les personnes</h2>
-        <div class="content" id="content-personnes"></div>
+      <div id="block-avant" class="phase-block phase-avant">
+        <h2 id="title-avant"></h2>
+        <div class="phase-subblock" id="subblock-avant-personnes">
+          <h3 id="label-personnes"></h3>
+          <div class="content" id="content-avant-personnes"></div>
+        </div>
+        <div class="phase-subblock" id="subblock-avant-data">
+          <h3 id="label-data-forfait"></h3>
+          <div class="content" id="content-avant-data"></div>
+        </div>
       </div>
-      <div id="section-donnees" class="section">
-        <h2>Risque sur les données (appareils et accès cloud)</h2>
-        <div class="content" id="content-donnees"></div>
+      <div id="block-pendant" class="phase-block phase-pendant">
+        <h2 id="title-pendant"></h2>
+        <div class="phase-subblock" id="subblock-pendant-personnes">
+          <h3 id="label-personnes-pendant"></h3>
+          <div class="content" id="content-pendant-personnes"></div>
+        </div>
+        <div class="phase-subblock" id="subblock-pendant-data">
+          <h3 id="label-data-forfait-pendant"></h3>
+          <div class="content" id="content-pendant-data"></div>
+        </div>
       </div>
-      <div id="section-forfait" class="section">
-        <h2>Risques hors forfait</h2>
-        <div class="content" id="content-forfait"></div>
+      <div id="block-apres" class="phase-block phase-apres">
+        <h2 id="title-apres"></h2>
+        <div class="phase-subblock" id="subblock-apres-personnes">
+          <h3 id="label-personnes-apres"></h3>
+          <div class="content" id="content-apres-personnes"></div>
+        </div>
+        <div class="phase-subblock" id="subblock-apres-data">
+          <h3 id="label-data-forfait-apres"></h3>
+          <div class="content" id="content-apres-data"></div>
+        </div>
       </div>
       <div id="pays-tip" class="pays-tip" role="note" style="display: none;"></div>
     </div>
@@ -479,28 +535,28 @@
         labelType: 'Type de voyage',
         typePro: 'Professionnel',
         typePerso: 'Personnel',
-        sectionPersonnes: 'Risque sur les personnes',
-        sectionDonnees: 'Risque sur les données (appareils et accès cloud)',
-        sectionForfait: 'Risques hors forfait',
+        subblockPersonnes: 'Personnes',
+        subblockDataForfait: 'Data / Forfait',
         phaseAvant: 'Avant le voyage',
         phasePendant: 'Pendant le voyage',
         phaseApres: 'Après le voyage',
         phaseAvantShort: 'Avant',
         phasePendantShort: 'Pendant',
         phaseApresShort: 'Après',
-        forfaitOlafly: 'Prendre une carte SIM spécifique Olafly : la destination n\'est pas couverte par le forfait de base.',
+        forfaitHolafly: 'Prendre une carte SIM spécifique Holafly : la destination n\'est pas couverte par le forfait de base.',
         forfaitRien: 'Aucun risque hors forfait identifié pour cette destination.',
         badgePersonnes: 'Risque personnes',
         badgeMicrosoft: 'Accès Microsoft bloqués',
         badgeDouane: 'Risque vol de données au passage à la douane',
         badgeDonnees: 'Vol / compromission données en voyage',
-        badgeOlafly: 'SIM Olafly nécessaire',
+        badgeHolafly: 'SIM Holafly nécessaire',
         noConsigne: 'Aucune consigne.',
         commentsLabel: 'Régions / forfait 4G :',
         clearPays: 'Effacer la sélection',
         emptyStateMessage: 'Sélectionnez un pays pour afficher les consignes.',
         travelTypeLabel: 'Type de voyage :',
-        tipLabel: 'En bref :'
+        tipLabel: 'En bref :',
+        linkMae: 'Conseils sécurité (MAE)'
       },
       en: {
         title: 'Travel guide',
@@ -512,28 +568,28 @@
         labelType: 'Travel type',
         typePro: 'Business',
         typePerso: 'Personal',
-        sectionPersonnes: 'Risk to persons',
-        sectionDonnees: 'Risk to data (devices and cloud access)',
-        sectionForfait: 'Out-of-plan risks',
+        subblockPersonnes: 'Persons',
+        subblockDataForfait: 'Data / Plan',
         phaseAvant: 'Before travel',
         phasePendant: 'During travel',
         phaseApres: 'After travel',
         phaseAvantShort: 'Before',
         phasePendantShort: 'During',
         phaseApresShort: 'After',
-        forfaitOlafly: 'Use a specific Olafly SIM card: destination not covered by base plan.',
+        forfaitHolafly: 'Use a specific Holafly SIM card: destination not covered by base plan.',
         forfaitRien: 'No out-of-plan risk identified for this destination.',
         badgePersonnes: 'Person risk',
         badgeMicrosoft: 'Microsoft access blocked',
         badgeDouane: 'Data theft risk at customs',
         badgeDonnees: 'Data theft/compromise during travel',
-        badgeOlafly: 'Olafly SIM needed',
+        badgeHolafly: 'Holafly SIM needed',
         noConsigne: 'No guidelines.',
         commentsLabel: 'Regions / 4G plan:',
         clearPays: 'Clear selection',
         emptyStateMessage: 'Select a country to display the guidelines.',
         travelTypeLabel: 'Travel type:',
-        tipLabel: 'Quick tip:'
+        tipLabel: 'Quick tip:',
+        linkMae: 'Official travel advice (FR)'
       }
     };
 
@@ -561,14 +617,17 @@
     const result = document.getElementById('result');
     const emptyStateEl = document.getElementById('empty-state');
     const paysTipEl = document.getElementById('pays-tip');
-    const contentPersonnes = document.getElementById('content-personnes');
-    const contentDonnees = document.getElementById('content-donnees');
-    const contentForfait = document.getElementById('content-forfait');
+    const contentAvantPersonnes = document.getElementById('content-avant-personnes');
+    const contentAvantData = document.getElementById('content-avant-data');
+    const contentPendantPersonnes = document.getElementById('content-pendant-personnes');
+    const contentPendantData = document.getElementById('content-pendant-data');
+    const contentApresPersonnes = document.getElementById('content-apres-personnes');
+    const contentApresData = document.getElementById('content-apres-data');
     const pageTitle = document.getElementById('page-title');
     const pageIntro = document.getElementById('page-intro');
-    const sectionPersonnesTitle = document.querySelector('#section-personnes h2');
-    const sectionDonneesTitle = document.querySelector('#section-donnees h2');
-    const sectionForfaitTitle = document.querySelector('#section-forfait h2');
+    const titleAvant = document.getElementById('title-avant');
+    const titlePendant = document.getElementById('title-pendant');
+    const titleApres = document.getElementById('title-apres');
 
     const MIN_CHARS = 2;
     let dropdownItems = [];
@@ -596,6 +655,24 @@
       if (!code || typeof code !== 'string' || code.length !== 2) return '';
       const c = code.toUpperCase();
       return String.fromCodePoint(...[...c].map(ch => 0x1F1E6 - 65 + ch.charCodeAt(0)));
+    }
+
+    const MAE_BASE = 'https://www.diplomatie.gouv.fr/fr/conseils-aux-voyageurs/conseils-par-pays-destination/';
+    const MAE_GENERIC = MAE_BASE;
+    const MAE_SLUGS = __MAE_SLUGS_JSON__ || {};
+    const MAE_OVERRIDE = __MAE_OVERRIDE_JSON__ || {};
+    function normalizeNameForMae(nom) {
+      if (!nom || typeof nom !== 'string') return '';
+      return nom.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim()
+        .replace(/[\u2019\u2018']/g, "'").replace(/\s+/g, ' ');
+    }
+    function maeUrl(pays) {
+      const code = (pays.code || '').toUpperCase();
+      if (MAE_OVERRIDE[code]) return MAE_BASE + MAE_OVERRIDE[code] + '/#securite';
+      const key = normalizeNameForMae(pays.nom);
+      const slug = MAE_SLUGS[key];
+      if (slug) return MAE_BASE + slug + '/#securite';
+      return MAE_GENERIC;
     }
 
     function buildDropdownOnce() {
@@ -646,9 +723,11 @@
       paysDropdownEmpty.textContent = u.noResult;
       selectType.options[0].text = u.typePro;
       selectType.options[1].text = u.typePerso;
-      sectionPersonnesTitle.textContent = u.sectionPersonnes;
-      sectionDonneesTitle.textContent = u.sectionDonnees;
-      sectionForfaitTitle.textContent = u.sectionForfait;
+      titleAvant.textContent = u.phaseAvant;
+      titlePendant.textContent = u.phasePendant;
+      titleApres.textContent = u.phaseApres;
+      document.querySelectorAll('[id^="label-personnes"]').forEach(el => { el.textContent = u.subblockPersonnes; });
+      document.querySelectorAll('[id^="label-data-forfait"]').forEach(el => { el.textContent = u.subblockDataForfait; });
       document.getElementById('pays-clear').setAttribute('aria-label', u.clearPays);
       document.documentElement.lang = lang;
       document.title = u.title;
@@ -765,9 +844,12 @@
         travelTypeBadge.style.display = 'none';
         paysBadgesRow.style.display = 'none';
         paysTipEl.style.display = 'none';
-        contentPersonnes.innerHTML = '';
-        contentDonnees.innerHTML = '';
-        contentForfait.innerHTML = '';
+        contentAvantPersonnes.innerHTML = '';
+        contentAvantData.innerHTML = '';
+        contentPendantPersonnes.innerHTML = '';
+        contentPendantData.innerHTML = '';
+        contentApresPersonnes.innerHTML = '';
+        contentApresData.innerHTML = '';
         return;
       }
       emptyStateEl.style.display = 'none';
@@ -791,11 +873,13 @@
       if (pays.blocked) indicators.push({ level: 'critique', label: u.badgeMicrosoft });
       if (pays.cleanDevice) indicators.push({ level: 'attention', label: u.badgeDouane });
       if (pays.cleanOnReturn) indicators.push({ level: 'attention', label: u.badgeDonnees });
-      if (pays.olaflySim) indicators.push({ level: 'info', label: '📱 ' + u.badgeOlafly });
+      if (pays.olaflySim) indicators.push({ level: 'info', label: '📱 ' + u.badgeHolafly });
       const flag = codeToFlag(pays.code);
       const nameHtml = escapeHtml(displayName(pays));
+      const maeHref = maeUrl(pays);
+      const maeLink = maeHref ? ' <a href="' + escapeHtml(maeHref) + '" class="pays-banner-mae" target="_blank" rel="noopener noreferrer">' + escapeHtml(u.linkMae) + '</a>' : '';
       paysBadgesRow.innerHTML =
-        '<div class="pays-banner-header"><span class="pays-banner-flag" aria-hidden="true">' + (flag || '') + '</span><span class="pays-banner-name">' + nameHtml + '</span></div>' +
+        '<div class="pays-banner-header"><span class="pays-banner-flag" aria-hidden="true">' + (flag || '') + '</span><span class="pays-banner-name">' + nameHtml + '</span>' + maeLink + '</div>' +
         '<div class="pays-badges-indicators">' +
         indicators.map(ind =>
           '<div class="indicator"><span class="dot ' + escapeHtml(ind.level) + '"></span><span>' + escapeHtml(ind.label) + '</span></div>'
@@ -803,21 +887,26 @@
         '</div>';
       paysBadgesRow.style.display = 'block';
 
-      // ——— Risque sur les personnes : une seule réponse consolidée (Avant / Pendant / Après) ———
+      // ——— Personnes : Avant / Pendant / Après ———
       const isOrangeRouge = rc === 'orange' || rc === 'red' || rc === 'rouge';
-      let pAvant = tx.personnes.avant.standard.concat(isOrangeRouge ? tx.personnes.avant.orange_rouge : []);
+      const standardAvant = isPro ? tx.personnes.avant.standard : tx.personnes.avant.standard.slice(2);
+      let pAvant = standardAvant.concat(isOrangeRouge ? tx.personnes.avant.orange_rouge : []);
       if (isOrangeRouge) {
         pAvant = pAvant.concat(rc === 'orange' ? [tx.personnes.avant.validationOrange] : [tx.personnes.avant.validationRouge]);
       }
-      const pPendant = tx.personnes.pendant.standard.concat(isOrangeRouge ? tx.personnes.pendant.orange_rouge : []);
+      let pPendant = tx.personnes.pendant.standard.slice();
+      if (isOrangeRouge) {
+        const maeStandardText = lang === 'en' ? 'Comply with Ministry of Foreign Affairs recommendations where applicable' : 'Respect des recos du Ministère des Affaires Etrangères le cas échéant';
+        pPendant = pPendant.filter(i => i !== maeStandardText);
+        pPendant = pPendant.concat(tx.personnes.pendant.orange_rouge);
+      }
       const pApres = tx.personnes.apres.standard.concat(isOrangeRouge ? tx.personnes.apres.orange_rouge : []);
-      contentPersonnes.innerHTML =
-        renderPhase('phase-avant', u.phaseAvant, pAvant) +
-        renderPhase('phase-pendant', u.phasePendant, pPendant) +
-        renderPhase('phase-apres', u.phaseApres, pApres);
-      document.getElementById('section-personnes').classList.remove('empty');
 
-      // ——— Risque sur les données : cumul des risques (blocked + cleanDevice possibles) ———
+      setBlockContent(contentAvantPersonnes, 'subblock-avant-personnes', pAvant);
+      setBlockContent(contentPendantPersonnes, 'subblock-pendant-personnes', pPendant, undefined, { maePays: pays });
+      setBlockContent(contentApresPersonnes, 'subblock-apres-personnes', pApres);
+
+      // ——— Data / Forfait : cumul des risques (blocked + cleanDevice), Holafly dans Avant ———
       let dAvant = tx.donnees.avant.standard.slice();
       let dPendant = [];
       let dApres = tx.donnees.apres.standard.slice();
@@ -843,19 +932,10 @@
         dAvant = dAvant.concat(tx.donnees.proDouaneAvant);
         dApres = dApres.concat(tx.donnees.proDouaneApres);
       }
-      contentDonnees.innerHTML =
-        renderPhase('phase-avant', u.phaseAvantShort, dAvant) +
-        renderPhase('phase-pendant', u.phasePendantShort, dPendant) +
-        renderPhase('phase-apres', u.phaseApresShort, dApres);
-      document.getElementById('section-donnees').classList.remove('empty');
-
-      // ——— Risques hors forfait ———
-      const itemsForfait = pays.olaflySim ? [u.forfaitOlafly] : [u.forfaitRien];
-      setContent(contentForfait, itemsForfait, 'section-forfait', pays.comments);
-
-      sectionPersonnesTitle.textContent = u.sectionPersonnes;
-      sectionDonneesTitle.textContent = u.sectionDonnees;
-      sectionForfaitTitle.textContent = u.sectionForfait;
+      const itemsAvantData = (pays.olaflySim ? [u.forfaitHolafly] : []).concat(dAvant);
+      setBlockContent(contentAvantData, 'subblock-avant-data', itemsAvantData, pays.comments);
+      setBlockContent(contentPendantData, 'subblock-pendant-data', dPendant);
+      setBlockContent(contentApresData, 'subblock-apres-data', dApres);
 
       const tipData = TIPS[pays.code] || TIPS[(pays.code || '').toUpperCase().slice(0, 2)];
       if (tipData && paysTipEl) {
@@ -867,16 +947,25 @@
       }
     }
 
-    function setContent(el, items, sectionId, comments) {
-      const section = document.getElementById(sectionId);
+    function isMaeReco(item) {
+      return typeof item === 'string' && (item.includes('Affaires Etrangères') || item.includes('Foreign Affairs'));
+    }
+
+    function setBlockContent(el, subblockId, items, comments, options) {
+      const subblock = document.getElementById(subblockId);
       const u = t();
       if (items.length === 0 && !comments) {
         el.innerHTML = '<p>' + escapeHtml(u.noConsigne) + '</p>';
-        section.classList.add('empty');
+        subblock.classList.add('empty');
         return;
       }
-      section.classList.remove('empty');
-      let html = '<ul>' + items.map(i => '<li>' + escapeHtml(i) + '</li>').join('') + '</ul>';
+      subblock.classList.remove('empty');
+      const maePays = options && options.maePays;
+      const maeHref = maePays ? maeUrl(maePays) : '';
+      let html = '<ul>' + items.map(i => {
+        const maeLink = (maeHref && isMaeReco(i)) ? ' <a href="' + escapeHtml(maeHref) + '" class="reco-mae-link" target="_blank" rel="noopener noreferrer">' + escapeHtml(u.linkMae) + '</a>' : '';
+        return '<li>' + escapeHtml(i) + maeLink + '</li>';
+      }).join('') + '</ul>';
       if (comments) {
         html += '<div class="comments-box"><strong>' + escapeHtml(u.commentsLabel) + '</strong> ' + escapeHtml(comments) + '</div>';
       }
@@ -907,5 +996,6 @@
 
     applyLang();
   </script>
+  <footer class="page-footer">Fichier généré le __GENERATION_DATE__</footer>
 </body>
 </html>
